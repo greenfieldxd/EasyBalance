@@ -1,37 +1,68 @@
 package com.greenfieldxd.easybalance
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
-import easybalance.composeapp.generated.resources.Res
-import easybalance.composeapp.generated.resources.compose_multiplatform
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
-                }
-            }
+        MainScreen()
+    }
+}
+
+@Composable
+fun MainScreen() {
+
+    var balance by remember { mutableStateOf(0L) }
+    var amount by remember { mutableStateOf("") }
+
+    var transactionType by remember { mutableStateOf(TransactionType.SPEND) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppColors.Background)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Column (modifier = Modifier.weight(0.5f)){
+            Text(
+                text = "Easy Balance",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = AppColors.OnBackground
+            )
+        }
+        Column (modifier = Modifier.weight(0.5f)) {
+            Text(
+                text = "$balance",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = AppColors.Primary
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            CustomIntTextField(
+                placeholder = "Enter amount",
+                value = amount,
+                onValueChange = { amount = it },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            CustomButton(
+                text = "Add Transaction",
+                onClick = { balance += amount.toIntOrNull() ?: 0 },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
