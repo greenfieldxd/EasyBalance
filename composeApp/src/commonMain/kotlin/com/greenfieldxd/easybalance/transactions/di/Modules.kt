@@ -15,5 +15,5 @@ val sharedModule = module {
     singleOf(::CategoryRepositoryImpl).bind<CategoryRepository>()
 
     //Screen
-    factory { TransactionScreenModel() }
+    factory { TransactionScreenModel(getKoin().get()) }
 }
