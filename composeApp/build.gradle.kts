@@ -7,12 +7,13 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.sqlDelight)
 }
 
 kotlin {
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 
@@ -26,15 +27,18 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
 
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            //SqlDelight
+            implementation(libs.sqldelight.android.driver)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -43,16 +47,35 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
+
+            //Data
             implementation(libs.kotlinx.datetime)
+
+            //Koin
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+
+            //SqlDelight
+            implementation(libs.sqldelight.runtime)
+
+            //Voyager
+            implementation(libs.voyager.tab.navigator)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.screenmodel)
+            implementation(libs.voyager.koin)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+
+            //Coroutines
             implementation(libs.kotlinx.coroutines.swing)
+
+            //SqlDelight
+            implementation(libs.sqldelight.sqlite.driver)
         }
         iosMain.dependencies {
-
+            //SqlDelight
+            implementation(libs.sqldelight.native.driver)
         }
     }
 }
@@ -96,6 +119,14 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.greenfieldxd.easybalance"
             packageVersion = "1.0.0"
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("TransactionDatabase") {
+            packageName.set("databases")
         }
     }
 }
