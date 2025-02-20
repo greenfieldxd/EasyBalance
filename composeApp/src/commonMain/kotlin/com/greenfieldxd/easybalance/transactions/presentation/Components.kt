@@ -19,6 +19,36 @@ import androidx.compose.ui.unit.sp
 import kotlin.math.roundToInt
 
 @Composable
+fun CustomTextField(
+    placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        visualTransformation = VisualTransformation.None,
+        modifier = modifier
+            .background(color = AppColors.Surface, shape = RoundedCornerShape(8.dp))
+            .border(1.dp, AppColors.Primary, shape = RoundedCornerShape(8.dp)),
+        textStyle = TextStyle(color = AppColors.OnSurface, fontSize = 18.sp)
+    ) { innerTextField ->
+        Box(modifier = Modifier.padding(8.dp)) {
+            innerTextField()
+            if (value.isEmpty()) {
+                Text(
+                    text = placeholder,
+                    color = AppColors.LightGray,
+                    fontSize = 16.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun CustomIntTextField(
     placeholder: String,
     value: String,

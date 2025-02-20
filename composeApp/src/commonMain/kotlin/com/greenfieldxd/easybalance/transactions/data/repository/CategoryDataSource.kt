@@ -7,10 +7,4 @@ object CategoryDataSource {
         "Развлечения" to listOf("кино", "игры", "путешествия", "концерт"),
         "Другое" to emptyList()
     )
-
-    val subcategories = mapOf(
-        "Фрукты и овощи" to listOf("яблоки", "бананы", "овощи"),
-        "Фастфуд" to listOf("бургер", "шаурма", "макдональдс"),
-        "Такси" to listOf("яндекс такси", "uber", "gett")
-    )
 }

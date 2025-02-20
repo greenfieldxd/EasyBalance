@@ -2,8 +2,7 @@ CREATE TABLE TransactionEntity (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     count REAL NOT NULL,
     category TEXT NOT NULL,
-    subcategory TEXT NOT NULL,
-    date INTEGER NOT NULL,
+    date TEXT NOT NULL,
     transactionType INTEGER NOT NULL
 );
 
@@ -11,8 +10,8 @@ getAllTransactions:
 SELECT * FROM TransactionEntity;
 
 insertTransaction:
-INSERT INTO TransactionEntity(count, category, subcategory, date, transactionType)
-VALUES (?, ?, ?, ?, ?);
+INSERT INTO TransactionEntity(count, category, date, transactionType)
+VALUES (?, ?, ?, ?);
 
 updateCount:
 UPDATE TransactionEntity

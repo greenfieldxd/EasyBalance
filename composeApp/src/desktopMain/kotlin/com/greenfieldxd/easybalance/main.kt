@@ -12,7 +12,7 @@ fun main() {
     application {
         val windowState = rememberWindowState(
             width = 400.dp,
-            height = 400.dp
+            height = 800.dp
         )
         Window(
             state = windowState,

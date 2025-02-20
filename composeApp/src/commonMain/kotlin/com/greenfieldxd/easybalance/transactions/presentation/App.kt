@@ -2,12 +2,11 @@ package com.greenfieldxd.easybalance.transactions.presentation
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import cafe.adriel.voyager.navigator.Navigator
 
 @Composable
-@Preview
 fun App() {
     MaterialTheme {
-        TransitionScreen().Content()
+        Navigator(screen = TransitionScreen())
     }
 }

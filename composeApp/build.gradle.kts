@@ -63,7 +63,7 @@ kotlin {
             implementation(libs.sqldelight.coroutines)
 
             //Voyager
-            implementation(libs.voyager.tab.navigator)
+            implementation(libs.voyager.navigator)
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.screenmodel)
             implementation(libs.voyager.koin)
@@ -76,6 +76,9 @@ kotlin {
 
             //SqlDelight
             implementation(libs.sqldelight.sqlite.driver)
+
+            //Logger
+            implementation(libs.logback.classic)
         }
         nativeMain.dependencies {
             //SqlDelight

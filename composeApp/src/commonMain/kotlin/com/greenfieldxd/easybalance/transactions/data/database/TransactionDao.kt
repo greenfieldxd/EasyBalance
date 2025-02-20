@@ -9,8 +9,8 @@ import kotlinx.coroutines.IO
 class TransactionDao(private val db: Database) {
     private val queries  = db.databaseQueries
 
-    fun insert(count: Double, category: String, subcategory: String, date: Int, transactionType: Int) {
-        queries.insertTransaction(count = count, category = category, subcategory = subcategory, date = date.toLong(), transactionType = transactionType.toLong())
+    fun insert(count: Double, category: String, date: String, transactionType: Int) {
+        queries.insertTransaction(count = count, category = category, date = date, transactionType = transactionType.toLong())
     }
 
     fun getAll() = queries.getAllTransactions().asFlow().mapToList(Dispatchers.IO)
