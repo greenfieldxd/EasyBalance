@@ -13,7 +13,7 @@ plugins {
 kotlin {
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
 
@@ -37,6 +37,9 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
+            //Koin
+            implementation(libs.koin.android)
+
             //SqlDelight
             implementation(libs.sqldelight.android.driver)
         }
@@ -52,11 +55,12 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
             //Koin
-            implementation(libs.koin.core)
+            api(libs.koin.core)
             implementation(libs.koin.compose)
 
             //SqlDelight
             implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines)
 
             //Voyager
             implementation(libs.voyager.tab.navigator)
@@ -73,7 +77,7 @@ kotlin {
             //SqlDelight
             implementation(libs.sqldelight.sqlite.driver)
         }
-        iosMain.dependencies {
+        nativeMain.dependencies {
             //SqlDelight
             implementation(libs.sqldelight.native.driver)
         }
@@ -125,7 +129,7 @@ compose.desktop {
 
 sqldelight {
     databases {
-        create("TransactionDatabase") {
+        create("Database") {
             packageName.set("databases")
         }
     }

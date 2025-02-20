@@ -4,17 +4,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import com.greenfieldxd.easybalance.transactions.di.initKoin
+import com.greenfieldxd.easybalance.transactions.presentation.App
 
-fun main() = application {
-    val windowState = rememberWindowState(
-        width = 400.dp,
-        height = 400.dp
-    )
-    Window(
-        state = windowState,
-        onCloseRequest = ::exitApplication,
-        title = "EasyBalance",
-    ) {
-        App()
+fun main() {
+    initKoin()
+    application {
+        val windowState = rememberWindowState(
+            width = 400.dp,
+            height = 400.dp
+        )
+        Window(
+            state = windowState,
+            onCloseRequest = ::exitApplication,
+            title = "EasyBalance",
+        ) {
+            App()
+        }
     }
 }

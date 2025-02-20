@@ -1,0 +1,27 @@
+CREATE TABLE TransactionEntity (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    count REAL NOT NULL,
+    category TEXT NOT NULL,
+    subcategory TEXT NOT NULL,
+    date INTEGER NOT NULL,
+    transactionType INTEGER NOT NULL
+);
+
+getAllTransactions:
+SELECT * FROM TransactionEntity;
+
+insertTransaction:
+INSERT INTO TransactionEntity(count, category, subcategory, date, transactionType)
+VALUES (?, ?, ?, ?, ?);
+
+updateCount:
+UPDATE TransactionEntity
+SET count = :count
+WHERE id IS :id;
+
+delete:
+DELETE FROM TransactionEntity
+WHERE id IS :id;
+
+deleteAll:
+DELETE FROM TransactionEntity;

@@ -1,4 +1,4 @@
-﻿package com.greenfieldxd.easybalance
+﻿package com.greenfieldxd.easybalance.transactions.presentation
 
 import androidx.compose.ui.graphics.Color
 

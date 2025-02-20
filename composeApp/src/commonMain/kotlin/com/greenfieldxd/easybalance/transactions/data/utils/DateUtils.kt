@@ -1,4 +1,4 @@
-package com.greenfieldxd.easybalance
+package com.greenfieldxd.easybalance.transactions.data.utils
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
