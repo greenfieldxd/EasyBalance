@@ -114,21 +114,27 @@ fun TransactionItem(transaction: TransactionModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(AppColors.Surface, shape = RoundedCornerShape(8.dp))
+            .background(AppColors.Surface, shape = RoundedCornerShape(15.dp))
             .padding(16.dp)
     ) {
         Text(
-            text = transaction.category,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
-            color = AppColors.OnSurface
+            text = "${transaction.count}",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.SecondaryVariant
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "${transaction.count}",
+            text = transaction.category,
             fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.SecondaryVariant
+            fontWeight = FontWeight.Medium,
+            color = AppColors.Primary
+        )
+        Text(
+            text = transaction.description,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            color = AppColors.OnSurface
         )
     }
 }

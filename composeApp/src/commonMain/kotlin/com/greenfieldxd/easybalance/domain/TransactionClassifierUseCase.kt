@@ -14,20 +14,20 @@ class TransactionClassifierUseCaseImpl(
     private val categoryRepository: CategoryRepository
 ) : TransactionClassifierUseCase {
     override suspend fun processTransaction(input: String, transactionType: TransactionType) {
-        val (amount, category) = extractAmountAndCategory(input)
+        val (amount, category, description) = extractAmountAndCategory(input)
         when {
             amount != null -> {
-                transactionDao.insert(amount, category, "Description", todayDate(), transactionType.ordinal)
+                transactionDao.insert(amount, category, description, todayDate(), transactionType.ordinal)
             }
         }
     }
 
-    private fun extractAmountAndCategory(input: String): Pair<Double?, String> {
+    private fun extractAmountAndCategory(input: String): Triple<Double?, String, String> {
         val amountRegex = Regex("\\d+(\\.\\d+)?")
         val amount = amountRegex.find(input)?.value?.toDoubleOrNull()
-        val description = input.replace(amountRegex, "").trim()
-        val category = categoryRepository.getCategory(description)
+        val inputWithoutAmount = input.replace(amountRegex, "").trim()
+        val categoryInfo = categoryRepository.getCategory(inputWithoutAmount)
 
-        return Pair(amount, category)
+        return Triple(amount, categoryInfo.first, categoryInfo.second)
     }
 }
