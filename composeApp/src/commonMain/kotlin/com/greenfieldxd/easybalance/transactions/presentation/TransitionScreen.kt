@@ -21,6 +21,7 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import com.greenfieldxd.easybalance.transactions.data.TransactionType
+import com.greenfieldxd.easybalance.transactions.domain.TransactionModel
 import databases.TransactionEntity
 
 class TransitionScreen : Screen {
@@ -59,7 +60,7 @@ class TransitionScreen : Screen {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 CustomTextField(
-                    placeholder = "Example: Taxi 100$",
+                    placeholder = "Example: Food 125.10$",
                     value = input,
                     onValueChange = { input = it },
                     modifier = Modifier.fillMaxWidth()
@@ -69,7 +70,7 @@ class TransitionScreen : Screen {
                     text = "Add Transaction",
                     onClick = {
                         screenModel.classifier(input, transactionType)
-                        balance += input.filter { it.isDigit() }.toLongOrNull() ?: 0L
+                        balance += input.filter { it.isDigit() }.toLongOrNull() ?: 0
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -96,11 +97,10 @@ class TransitionScreen : Screen {
 }
 
 @Composable
-fun TransactionItem(transaction: TransactionEntity) {
+fun TransactionItem(transaction: TransactionModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
             .background(AppColors.Surface, shape = RoundedCornerShape(8.dp))
             .padding(16.dp)
     ) {
@@ -115,7 +115,7 @@ fun TransactionItem(transaction: TransactionEntity) {
             text = "${transaction.count}",
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            color = if (transaction.transactionType == TransactionType.INCOME.ordinal.toLong()) AppColors.Green else AppColors.SecondaryVariant
+            color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.SecondaryVariant
         )
     }
 }

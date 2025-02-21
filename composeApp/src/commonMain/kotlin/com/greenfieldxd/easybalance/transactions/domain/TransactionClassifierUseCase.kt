@@ -6,14 +6,14 @@ import com.greenfieldxd.easybalance.transactions.data.repository.CategoryReposit
 import com.greenfieldxd.easybalance.transactions.data.utils.todayDate
 
 interface TransactionClassifierUseCase {
-    fun processTransaction(input: String, transactionType: TransactionType)
+    suspend fun processTransaction(input: String, transactionType: TransactionType)
 }
 
 class TransactionClassifierUseCaseImpl(
     private val transactionDao: TransactionDao,
     private val categoryRepository: CategoryRepository
 ) : TransactionClassifierUseCase{
-    override fun processTransaction(input: String, transactionType: TransactionType) {
+    override suspend fun processTransaction(input: String, transactionType: TransactionType) {
         val (amount, category) = extractAmountAndCategory(input)
         when {
             amount != null -> {

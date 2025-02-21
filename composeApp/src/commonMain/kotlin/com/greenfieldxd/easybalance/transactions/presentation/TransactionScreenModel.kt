@@ -21,7 +21,9 @@ class TransactionScreenModel(
     }
 
     fun classifier(input: String, transactionType: TransactionType) {
-        transactionClassifierUseCase.processTransaction(input, transactionType)
+        screenModelScope.launch {
+            transactionClassifierUseCase.processTransaction(input, transactionType)
+        }
     }
 
     //Optional
