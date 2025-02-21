@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -122,7 +123,8 @@ fun CustomToggleButton(
     ) {
         Text(
             text = text,
-            color = if (isActive) AppColors.Green else AppColors.DarkGray,
+            fontWeight = FontWeight.Bold,
+            color = if (isActive) AppColors.Green else AppColors.Red,
             fontSize = 14.sp
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -130,10 +132,11 @@ fun CustomToggleButton(
             checked = isActive,
             onCheckedChange = { onToggle(it) },
             colors = SwitchDefaults.colors(
-                checkedThumbColor = AppColors.Green,
-                uncheckedThumbColor = AppColors.DarkGray,
-                checkedTrackColor = AppColors.LightGreen,
-                uncheckedTrackColor = AppColors.LightGray
+                checkedThumbColor = AppColors.LightGreen,
+                uncheckedThumbColor = AppColors.LightRed,
+                checkedTrackColor = AppColors.Green,
+                uncheckedTrackColor = AppColors.Red,
+                uncheckedBorderColor = AppColors.Red
             )
         )
     }
@@ -142,6 +145,7 @@ fun CustomToggleButton(
 @Composable
 fun CustomButton(
     text: String,
+    enabled: Boolean = true,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = AppColors.Primary,
@@ -149,6 +153,7 @@ fun CustomButton(
 ) {
     Button(
         modifier = modifier,
+        enabled = enabled,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = backgroundColor,

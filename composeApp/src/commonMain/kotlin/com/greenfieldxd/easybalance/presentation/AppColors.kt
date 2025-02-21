@@ -5,21 +5,26 @@ import androidx.compose.ui.graphics.Color
 object AppColors {
     val Primary = Color(0xFF1E88E5) // Primary blue
     val PrimaryVariant = Color(0xFF0D47A1) // Dark blue
-    val Secondary = Color(0xFFD32F2F) // Accent red
-    val SecondaryVariant = Color(0xFFB71C1C) // Dark red
+    val Secondary = Color(0xFFD32F2F) // Primary ded
+    val OnSecondary = Color(0xFFFFFFFF) // White on accent
+    val SecondaryVariant = Color(0xFF9A0007) // Dark red
     val Background = Color(0xFFF5F5F5) // Light gray background
     val Surface = Color(0xFFFFFFFF) // Pure white
     val OnPrimary = Color(0xFFFFFFFF) // White on primary
-    val OnSecondary = Color(0xFFFFFFFF) // White on accent
+
     val OnBackground = Color(0xFF424242) // Dark gray text
     val OnSurface = Color(0xFF212121) // Deep black text
 
+    val LightGreen = Color(0xFFA5D6A7) // Light green
+    val Green = Color(0xFF43A047) // Standard green
+    val DarkGreen = Color(0xFF1B5E20) // Dark green
+
+    val LightRed = Color(0xFFEF5350) // Light red
+    val Red = Color(0xFFD32F2F) // Standard red
+    val DarkRed = Color(0xFF9A0007) // Dark red
+
     val LightGray = Color(0xFFD3D3D3) // Neutral gray
     val DarkGray = Color(0xFF424242) // Charcoal gray
-
-    val LightGreen = Color(0xFFA5D6A7) // Natural green
-    val Green = Color(0xFF43A047) // Deep green
-    val DarkGreen = Color(0xFF1B5E20) // Dark green
 
     val LightYellow = Color(0xFFFFF59D) // Warm yellow
     val Yellow = Color(0xFFFFD600) // Bright sunny yellow
