@@ -4,6 +4,7 @@ import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.database.TransactionDao
 import com.greenfieldxd.easybalance.data.repository.CategoryRepository
 import com.greenfieldxd.easybalance.data.utils.todayDate
+import com.greenfieldxd.easybalance.data.utils.truncateToDecimals
 
 interface TransactionClassifierUseCase {
     suspend fun processTransaction(input: String, transactionType: TransactionType)
@@ -24,7 +25,7 @@ class TransactionClassifierUseCaseImpl(
 
     private fun extractAmountAndCategory(input: String): Triple<Double?, String, String> {
         val amountRegex = Regex("\\d+(\\.\\d+)?")
-        val amount = amountRegex.find(input)?.value?.toDoubleOrNull()
+        val amount = truncateToDecimals(amountRegex.find(input)?.value?.toDoubleOrNull() ?: 0.0, 2)
         val inputWithoutAmount = input.replace(amountRegex, "").trim()
         val categoryInfo = categoryRepository.getCategory(inputWithoutAmount)
 

@@ -10,9 +10,8 @@ class CategoryRepositoryImpl : CategoryRepository {
 
         // Проверяем каждую категорию
         for (category in CategoryDataSource.categories) {
-            // Сначала пробуем найти совпадение по имени категории
             if (fuzzyMatchWord(category.name.lowercase(), normalizedDesc)) {
-                return category.name to category.name
+                return category.name to "Не определено"
             }
             // Затем перебираем ключевые слова
             for (keyword in category.keywords) {

@@ -29,7 +29,7 @@ class AnalyticsScreen : Screen {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomButton(
-                text = "Back",
+                text = "Назад",
                 onClick = { navigator.pop() }
             )
         }

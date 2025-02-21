@@ -23,6 +23,7 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.greenfieldxd.easybalance.data.TransactionType
+import com.greenfieldxd.easybalance.data.utils.formatNumber
 import com.greenfieldxd.easybalance.domain.TransactionModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 import com.greenfieldxd.easybalance.presentation.CustomButton
@@ -37,8 +38,10 @@ class TransitionScreen : Screen {
     override fun Content() {
         val screenModel = koinScreenModel<TransactionScreenModel>()
         val navigator = LocalNavigator.currentOrThrow
+
         val transactions by screenModel.transactions.collectAsState(emptyList())
-        var balance by remember { mutableStateOf(0L) }
+        val balance by screenModel.balance.collectAsState(0.0)
+
         var input by remember { mutableStateOf("") }
         var transactionType by remember { mutableStateOf(TransactionType.SPEND) }
 
@@ -54,36 +57,45 @@ class TransitionScreen : Screen {
                     Text(
                         modifier = Modifier.weight(1f),
                         text = "Easy Balance",
-                        fontSize = 24.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         color = AppColors.OnBackground
                     )
                     CustomButton(
-                        text = "Analytics",
+                        text = "Аналитика",
                         onClick = { navigator.push(AnalyticsScreen()) },
                     )
                 }
             }
             Column(modifier = Modifier.weight(0.2f)) {
-                Text(
-                    text = "$balance",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = AppColors.Primary
-                )
+                Row {
+                    Text(
+                        modifier = Modifier.weight(0.7f),
+                        text = "${formatNumber(balance)} BYN",
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppColors.OnBackground
+                    )
+                    CustomButton(
+                        modifier = Modifier.weight(0.3f),
+                        text = if (transactionType == TransactionType.INCOME) "Доход" else "Расход",
+                        onClick = { transactionType = if (transactionType == TransactionType.INCOME) TransactionType.SPEND else TransactionType.INCOME },
+                        backgroundColor = if (transactionType == TransactionType.INCOME) AppColors.Green else AppColors.SecondaryVariant
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 CustomTextField(
-                    placeholder = "Example: Food 125.10$",
+                    placeholder = "Пример: Такси 12.10",
                     value = input,
                     onValueChange = { input = it },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 CustomButton(
-                    text = "Add Transaction",
+                    text = "Добавить",
                     onClick = {
                         screenModel.classifier(input, transactionType)
-                        balance += input.filter { it.isDigit() }.toLongOrNull() ?: 0
+                        input = ""
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -91,12 +103,13 @@ class TransitionScreen : Screen {
             Column(modifier = Modifier.weight(0.7f)) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Transactions",
+                    text = "Транзакции",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = AppColors.OnBackground
                 )
                 LazyColumn(
+                    reverseLayout = true,
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -118,7 +131,7 @@ fun TransactionItem(transaction: TransactionModel) {
             .padding(16.dp)
     ) {
         Text(
-            text = "${transaction.count}",
+            text = "${formatNumber(transaction.count)} BYN",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.SecondaryVariant
@@ -130,11 +143,20 @@ fun TransactionItem(transaction: TransactionModel) {
             fontWeight = FontWeight.Medium,
             color = AppColors.Primary
         )
-        Text(
-            text = transaction.description,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            color = AppColors.OnSurface
-        )
+        Row (modifier = Modifier.fillMaxWidth()){
+            Text(
+                modifier = Modifier.weight(1f),
+                text = transaction.description,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                color = AppColors.OnSurface
+            )
+            Text(
+                text = transaction.date,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Normal,
+                color = AppColors.OnSurface
+            )
+        }
     }
 }

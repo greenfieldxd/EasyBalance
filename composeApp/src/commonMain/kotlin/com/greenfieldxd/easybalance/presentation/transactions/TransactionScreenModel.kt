@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.database.TransactionDao
 import com.greenfieldxd.easybalance.domain.TransactionClassifierUseCase
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class TransactionScreenModel(
@@ -13,6 +14,9 @@ class TransactionScreenModel(
 ) : ScreenModel {
 
     val transactions = transactionDao.getAll()
+    val balance = transactionDao.getAll().map { transactionModels ->
+        transactionModels.sumOf { it.count }
+    }
 
     init {
         screenModelScope.launch {
