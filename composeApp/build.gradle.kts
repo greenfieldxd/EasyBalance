@@ -80,7 +80,7 @@ kotlin {
             //Logger
             implementation(libs.logback.classic)
         }
-        nativeMain.dependencies {
+        iosMain.dependencies {
             //SqlDelight
             implementation(libs.sqldelight.native.driver)
         }
