@@ -8,6 +8,7 @@ import java.io.File
 actual class DatabaseDriverFactory {
     actual fun create(): SqlDriver {
         val appDir = File(System.getProperty("user.home"), "EasyBalance")
+
         val databasePath = File(appDir, "Database")
 
         if (!appDir.exists()) {

@@ -22,7 +22,6 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import com.greenfieldxd.easybalance.transactions.data.TransactionType
 import com.greenfieldxd.easybalance.transactions.domain.TransactionModel
-import databases.TransactionEntity
 
 class TransitionScreen : Screen {
 

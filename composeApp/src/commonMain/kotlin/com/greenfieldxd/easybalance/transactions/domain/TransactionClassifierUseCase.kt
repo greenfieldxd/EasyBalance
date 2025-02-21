@@ -17,7 +17,7 @@ class TransactionClassifierUseCaseImpl(
         val (amount, category) = extractAmountAndCategory(input)
         when {
             amount != null -> {
-                transactionDao.insert(amount, category, todayDate(), transactionType.ordinal)
+                transactionDao.insert(amount, category, "Description", todayDate(), transactionType.ordinal)
             }
         }
     }

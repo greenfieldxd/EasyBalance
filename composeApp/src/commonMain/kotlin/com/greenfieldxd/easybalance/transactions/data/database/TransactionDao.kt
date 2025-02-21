@@ -16,15 +16,16 @@ class TransactionDao(
 ) {
     private val queries  = db.databaseQueries
 
-    suspend fun insert(count: Double, category: String, date: String, transactionType: Int) = withContext(ioDispatcher) {
-        queries.insertTransaction(count = count, category = category, date = date, transactionType = transactionType.toLong())
+    suspend fun insert(count: Double, category: String, description: String, date: String, transactionType: Int) = withContext(ioDispatcher) {
+        queries.insertTransaction(count = count, category = category, description = description, date = date, transactionType = transactionType.toLong())
     }
 
-    fun getAll() = queries.getAllTransactions(mapper = { id, count, category, date, transactionType ->
+    fun getAll() = queries.getAllTransactions(mapper = { id, count, category, description, date, transactionType ->
         TransactionModel(
             id = id,
             count = count,
             category = category,
+            description= description,
             date = date,
             transactionType = if (transactionType == TransactionType.INCOME.ordinal.toLong()) TransactionType.INCOME else TransactionType.SPEND
         )
