@@ -42,6 +42,9 @@ kotlin {
 
             //SqlDelight
             implementation(libs.sqldelight.android.driver)
+
+            //Charts
+            implementation(libs.charts.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -67,6 +70,9 @@ kotlin {
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.screenmodel)
             implementation(libs.voyager.koin)
+
+            //Charts
+            implementation(libs.charts)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -77,12 +83,19 @@ kotlin {
             //SqlDelight
             implementation(libs.sqldelight.sqlite.driver)
 
+            //Charts
+            implementation(libs.charts.jvm)
+
             //Logger
             implementation(libs.logback.classic)
         }
         iosMain.dependencies {
             //SqlDelight
             implementation(libs.sqldelight.native.driver)
+
+            //Charts
+            implementation(libs.charts.iosx64)
+            implementation(libs.charts.iosarm64)
         }
     }
 }
