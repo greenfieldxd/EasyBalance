@@ -26,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +48,13 @@ actual fun TransactionsListSection(
     onEdit: () -> Unit,
     onDelete: (Long) -> Unit
 ) {
+    val scrollBarVisible by remember {
+        derivedStateOf {
+            val canScroll = scrollState.canScrollForward || scrollState.canScrollBackward
+            canScroll
+        }
+    }
+
     Box (modifier = Modifier.fillMaxSize()) {
         VerticalScrollbar(
             modifier = Modifier
@@ -58,7 +66,7 @@ actual fun TransactionsListSection(
         Column(
             modifier = Modifier.fillMaxWidth()
                 .padding(top = 8.dp)
-                .padding(end = 16.dp),
+                .padding(end = if (scrollBarVisible) 16.dp else 0.dp)
         ) {
             Text(
                 text = "Транзакции",

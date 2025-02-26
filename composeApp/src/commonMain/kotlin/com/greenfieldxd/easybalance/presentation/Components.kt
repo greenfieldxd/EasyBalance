@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -18,8 +19,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +36,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 @Composable
@@ -177,11 +184,12 @@ fun CustomButton(
         Text(text = text, fontSize = 16.sp)
     }
 }
+
 @Composable
 fun CustomSwipeBox(
     modifier: Modifier = Modifier,
     maxSwipeDistance: Dp = 200.dp,
-    swipeThreshold: Float = 0.6f,
+    swipeThreshold: Float = 0.5f,
     onDelete: () -> Unit,
     onEdit: () -> Unit,
     content: @Composable () -> Unit
@@ -202,16 +210,24 @@ fun CustomSwipeBox(
         else -> Triple(Icons.Filled.Delete, Alignment.CenterEnd, Color.LightGray)
     }
 
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                return if (abs(available.x) > abs(available.y)) {
+                    Offset.Zero
+                } else {
+                    available
+                }
+            }
+        }
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .nestedScroll(nestedScrollConnection)
             .pointerInput(Unit) {
-                detectDragGestures(
-                    onDrag = { change, dragAmount ->
-                        change.consume()
-                        val newOffset = offsetX.value + dragAmount.x
-                        scope.launch { offsetX.snapTo(newOffset.coerceIn(-maxSwipePx, maxSwipePx)) }
-                    },
+                detectHorizontalDragGestures(
                     onDragEnd = {
                         when {
                             offsetX.value <= -maxSwipePx * swipeThreshold -> onDelete()
@@ -224,7 +240,11 @@ fun CustomSwipeBox(
                             )
                         }
                     }
-                )
+                ) { change, dragAmount ->
+                    change.consume()
+                    val newOffset = offsetX.value + dragAmount
+                    scope.launch { offsetX.snapTo(newOffset.coerceIn(-maxSwipePx, maxSwipePx)) }
+                }
             }
     ) {
         Box(
