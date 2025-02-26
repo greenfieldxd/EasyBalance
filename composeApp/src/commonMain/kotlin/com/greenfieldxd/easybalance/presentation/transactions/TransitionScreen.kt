@@ -1,5 +1,9 @@
 package com.greenfieldxd.easybalance.presentation.transactions
 
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -40,6 +45,7 @@ import com.greenfieldxd.easybalance.presentation.CustomButton
 import com.greenfieldxd.easybalance.presentation.CustomTextField
 import com.greenfieldxd.easybalance.presentation.CustomToggleButton
 import com.greenfieldxd.easybalance.presentation.analytics.AnalyticsScreen
+import kotlinx.coroutines.launch
 
 class TransitionScreen : Screen {
 
@@ -78,9 +84,7 @@ class TransitionScreen : Screen {
             BalanceSection(
                 balance = totalBalance,
                 transactionType = transactionType,
-                onTypeChange = { active ->
-                    transactionType = if (active) TransactionType.INCOME else TransactionType.SPEND
-                },
+                onTypeChange = { transactionType = it },
                 input = input,
                 onInputChange = { input = it },
                 onAddClick = {
@@ -114,33 +118,45 @@ fun HeaderSection(navigator: Navigator) {
 @Composable
 fun BalanceSection(
     balance: Double,
-    transactionType: TransactionType,
-    onTypeChange: (Boolean) -> Unit,
     input: String,
+    transactionType: TransactionType,
+    onTypeChange: (TransactionType) -> Unit,
     onInputChange: (String) -> Unit,
     onAddClick: () -> Unit
 ) {
+    val transactionText = when (transactionType) {
+        TransactionType.INCOME -> "Доход"
+        TransactionType.SPEND -> "Расход"
+    }
+
+    val targetColor = when (transactionType) {
+        TransactionType.INCOME -> AppColors.Green
+        TransactionType.SPEND -> AppColors.Red
+    }
+
+    val animatedColor by animateColorAsState(
+        targetValue = targetColor,
+        animationSpec = tween(durationMillis = 300)
+    )
+
     Column {
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(0.6f),
-                text = "${formatNumber(balance)} BYN",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
-                color = AppColors.OnBackground
-            )
-            CustomToggleButton(
-                modifier = Modifier.weight(0.4f),
-                isActive = transactionType == TransactionType.INCOME,
-                text = if (transactionType == TransactionType.INCOME) "Доход" else "Расход",
-                onToggle = onTypeChange
-            )
-        }
+        Text(
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            text = "${formatNumber(balance)} BYN",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = AppColors.OnBackground
+        )
+        CustomButton(
+            text = transactionText,
+            backgroundColor = animatedColor,
+            onClick = {
+                if (transactionType == TransactionType.INCOME) onTypeChange.invoke(TransactionType.SPEND)
+                else onTypeChange.invoke(TransactionType.INCOME)
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         Spacer(modifier = Modifier.height(16.dp))
         CustomTextField(
             placeholder = "Пример: Такси 12.10",
