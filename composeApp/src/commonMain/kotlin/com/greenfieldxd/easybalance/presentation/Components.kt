@@ -1,16 +1,23 @@
 package com.greenfieldxd.easybalance.presentation
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -162,5 +169,71 @@ fun CustomButton(
         shape = RoundedCornerShape(8.dp),
     ) {
         Text(text = text, fontSize = 16.sp)
+    }
+}
+
+@Composable
+fun CustomSwipeBox(
+    modifier: Modifier = Modifier,
+    onDelete: () -> Unit,
+    onEdit: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    val swipeState = rememberSwipeToDismissBoxState()
+
+    lateinit var icon: ImageVector
+    lateinit var alignment: Alignment
+    val color: Color
+
+    when (swipeState.dismissDirection) {
+        SwipeToDismissBoxValue.EndToStart -> {
+            icon = Icons.Filled.Delete
+            alignment = Alignment.CenterEnd
+            color = AppColors.Red
+        }
+        SwipeToDismissBoxValue.StartToEnd -> {
+            icon = Icons.Filled.Edit
+            alignment = Alignment.CenterStart
+            color = AppColors.Green
+        }
+        SwipeToDismissBoxValue.Settled -> {
+            icon = Icons.Filled.Delete
+            alignment = Alignment.CenterEnd
+            color = AppColors.LightBrown
+        }
+    }
+
+    SwipeToDismissBox(
+        modifier = modifier.animateContentSize(),
+        state = swipeState,
+        backgroundContent = {
+            Box(
+                contentAlignment = alignment,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(1.dp)
+                    .background(color, shape = MaterialTheme.shapes.medium)
+            ) {
+                Icon(
+                    modifier = Modifier.minimumInteractiveComponentSize(),
+                    imageVector = icon, contentDescription = null
+                )
+            }
+        }
+    ) {
+        content()
+    }
+
+    when (swipeState.currentValue) {
+        SwipeToDismissBoxValue.EndToStart -> {
+            onDelete()
+        }
+        SwipeToDismissBoxValue.StartToEnd -> {
+            LaunchedEffect(swipeState) {
+                onEdit()
+                swipeState.reset()
+            }
+        }
+        else -> { }
     }
 }

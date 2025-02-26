@@ -3,7 +3,7 @@ package com.greenfieldxd.easybalance.domain
 import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.database.TransactionDao
 import com.greenfieldxd.easybalance.data.repository.CategoryRepository
-import com.greenfieldxd.easybalance.data.utils.todayDate
+import com.greenfieldxd.easybalance.data.utils.todayDateTime
 import com.greenfieldxd.easybalance.data.utils.truncateToDecimals
 
 interface TransactionClassifierUseCase {
@@ -18,7 +18,7 @@ class TransactionClassifierUseCaseImpl(
         val (amount, category, description) = extractAmountAndCategory(input)
         when {
             amount != null -> {
-                transactionDao.insert(amount, category, description, todayDate(), transactionType.ordinal)
+                transactionDao.insert(amount, category, description, todayDateTime(), transactionType.ordinal)
             }
         }
     }

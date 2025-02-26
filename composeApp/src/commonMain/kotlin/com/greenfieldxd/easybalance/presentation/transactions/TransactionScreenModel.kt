@@ -13,16 +13,10 @@ class TransactionScreenModel(
     private val transactionDao: TransactionDao
 ) : ScreenModel {
 
-    val transactions = transactionDao.getAll()
+    val transactions = transactionDao.getAll().map { transactions -> transactions.sortedByDescending { it.date } }
     val balance = transactionDao.getAll().map { transactionModels ->
         transactionModels.sumOf {
             if (it.transactionType == TransactionType.INCOME) it.count else -it.count
-        }
-    }
-
-    init {
-        screenModelScope.launch {
-            //Some init fun
         }
     }
 
@@ -32,8 +26,9 @@ class TransactionScreenModel(
         }
     }
 
-    //Optional
-    override fun onDispose() {
-        super.onDispose()
+    fun deleteTransaction(id: Long) {
+        screenModelScope.launch {
+            transactionDao.delete(id)
+        }
     }
 }

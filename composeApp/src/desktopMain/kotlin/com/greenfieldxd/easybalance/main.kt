@@ -11,7 +11,7 @@ fun main() {
     initKoin()
     application {
         val windowState = rememberWindowState(
-            width = 400.dp,
+            width = 500.dp,
             height = 800.dp
         )
         Window(

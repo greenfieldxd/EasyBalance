@@ -8,11 +8,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -54,6 +56,16 @@ class TransitionScreen : Screen {
         var input by remember { mutableStateOf("") }
         var transactionType by remember { mutableStateOf(TransactionType.SPEND) }
 
+        var previousSize by remember { mutableIntStateOf(0) }
+
+        LaunchedEffect (transactions) {
+            if (transactions.isNotEmpty() && transactions.size > previousSize){
+                previousSize = transactions.size
+                scrollState.animateScrollToItem(0)
+            }
+            else previousSize = transactions.size
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -76,7 +88,7 @@ class TransitionScreen : Screen {
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
-            TransactionsListSection(transactions, scrollState)
+            TransactionsListSection(transactions, scrollState, onEdit = { }, onDelete = { screenModel.deleteTransaction(it) })
         }
     }
 }
@@ -146,70 +158,7 @@ fun BalanceSection(
 }
 
 @Composable
-fun TransactionsListSection(transactions: List<TransactionModel>, scrollState: LazyListState) {
-    LaunchedEffect(transactions) {
-        if (transactions.isNotEmpty()) {
-            scrollState.animateScrollToItem(transactions.lastIndex)
-        }
-    }
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Транзакции",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = AppColors.OnBackground
-        )
-        LazyColumn(
-            state = scrollState,
-            reverseLayout = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(transactions) { transaction ->
-                TransactionItem(transaction)
-            }
-        }
-    }
-}
+expect fun TransactionsListSection(transactions: List<TransactionModel>, scrollState: LazyListState, onEdit: () -> Unit, onDelete: (Long) -> Unit)
 
 @Composable
-fun TransactionItem(transaction: TransactionModel) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(AppColors.Surface, shape = RoundedCornerShape(15.dp))
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "${formatNumber(transaction.count)} BYN",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.Red
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = transaction.category,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-            color = AppColors.Primary
-        )
-        Row (modifier = Modifier.fillMaxWidth()){
-            Text(
-                modifier = Modifier.weight(1f),
-                text = transaction.description,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
-                color = AppColors.OnSurface
-            )
-            Text(
-                text = transaction.date,
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Normal,
-                color = AppColors.OnSurface
-            )
-        }
-    }
-}
+expect fun TransactionItem(modifier: Modifier = Modifier, transaction: TransactionModel, onEdit: (() -> Unit)? = null, onDelete: ((Long) -> Unit)? = null)
