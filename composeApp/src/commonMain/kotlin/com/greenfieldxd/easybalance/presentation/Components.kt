@@ -1,8 +1,10 @@
 package com.greenfieldxd.easybalance.presentation
 
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -12,18 +14,22 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
@@ -171,69 +177,75 @@ fun CustomButton(
         Text(text = text, fontSize = 16.sp)
     }
 }
-
 @Composable
 fun CustomSwipeBox(
     modifier: Modifier = Modifier,
+    maxSwipeDistance: Dp = 200.dp,
+    swipeThreshold: Float = 0.6f,
     onDelete: () -> Unit,
     onEdit: () -> Unit,
     content: @Composable () -> Unit
 ) {
-    val swipeState = rememberSwipeToDismissBoxState()
+    val scope = rememberCoroutineScope()
+    val maxSwipePx = with(LocalDensity.current) { maxSwipeDistance.toPx() }
+    val offsetX = remember { Animatable(0f) }
 
-    lateinit var icon: ImageVector
-    lateinit var alignment: Alignment
-    val color: Color
-
-    when (swipeState.dismissDirection) {
-        SwipeToDismissBoxValue.EndToStart -> {
-            icon = Icons.Filled.Delete
-            alignment = Alignment.CenterEnd
-            color = AppColors.Red
-        }
-        SwipeToDismissBoxValue.StartToEnd -> {
-            icon = Icons.Filled.Edit
-            alignment = Alignment.CenterStart
-            color = AppColors.Green
-        }
-        SwipeToDismissBoxValue.Settled -> {
-            icon = Icons.Filled.Delete
-            alignment = Alignment.CenterEnd
-            color = AppColors.LightBrown
-        }
+    val dismissDirection = when {
+        offsetX.value < 0 -> SwipeToDismissBoxValue.EndToStart
+        offsetX.value > 0 -> SwipeToDismissBoxValue.StartToEnd
+        else -> SwipeToDismissBoxValue.Settled
     }
 
-    SwipeToDismissBox(
-        modifier = modifier.animateContentSize(),
-        state = swipeState,
-        backgroundContent = {
-            Box(
-                contentAlignment = alignment,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(1.dp)
-                    .background(color, shape = MaterialTheme.shapes.medium)
-            ) {
-                Icon(
-                    modifier = Modifier.minimumInteractiveComponentSize(),
-                    imageVector = icon, contentDescription = null
+    val (icon, alignment, color) = when (dismissDirection) {
+        SwipeToDismissBoxValue.EndToStart -> Triple(Icons.Filled.Delete, Alignment.CenterEnd, AppColors.Red)
+        SwipeToDismissBoxValue.StartToEnd -> Triple(Icons.Filled.Edit, Alignment.CenterStart, AppColors.Green)
+        else -> Triple(Icons.Filled.Delete, Alignment.CenterEnd, Color.LightGray)
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDrag = { change, dragAmount ->
+                        change.consume()
+                        val newOffset = offsetX.value + dragAmount.x
+                        scope.launch { offsetX.snapTo(newOffset.coerceIn(-maxSwipePx, maxSwipePx)) }
+                    },
+                    onDragEnd = {
+                        when {
+                            offsetX.value <= -maxSwipePx * swipeThreshold -> onDelete()
+                            offsetX.value >= maxSwipePx * swipeThreshold -> onEdit()
+                        }
+                        scope.launch {
+                            offsetX.animateTo(
+                                targetValue = 0f,
+                                animationSpec = tween(300)
+                            )
+                        }
+                    }
                 )
             }
-        }
     ) {
-        content()
-    }
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(color, shape = MaterialTheme.shapes.medium)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier
+                    .align(alignment)
+                    .padding(16.dp)
+            )
+        }
 
-    when (swipeState.currentValue) {
-        SwipeToDismissBoxValue.EndToStart -> {
-            onDelete()
+        Box(
+            modifier = Modifier
+                .offset { IntOffset(offsetX.value.roundToInt(), 0) }
+        ) {
+            content()
         }
-        SwipeToDismissBoxValue.StartToEnd -> {
-            LaunchedEffect(swipeState) {
-                onEdit()
-                swipeState.reset()
-            }
-        }
-        else -> { }
     }
 }
