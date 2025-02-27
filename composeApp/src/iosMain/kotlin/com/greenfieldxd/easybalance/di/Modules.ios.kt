@@ -6,5 +6,7 @@ import databases.Database
 import org.koin.dsl.module
 
 actual val platformModule = module {
-    single { TransactionDao(Database(driver = DatabaseDriverFactory().create())) }
+    single { DatabaseDriverFactory().create() }
+    single { TransactionDao(Database(driver = get())) }
+    single { TransactionDao(Database(driver = get())) }
 }

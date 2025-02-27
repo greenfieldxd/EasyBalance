@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.sqlDelight)
+    alias(libs.plugins.pluginSerialization)
 }
 
 kotlin {
@@ -56,6 +57,9 @@ kotlin {
 
             //Data
             implementation(libs.kotlinx.datetime)
+
+            //Serialization
+            implementation(libs.kotlinx.serialization.json)
 
             //Koin
             api(libs.koin.core)

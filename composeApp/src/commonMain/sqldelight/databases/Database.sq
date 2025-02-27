@@ -1,6 +1,6 @@
 CREATE TABLE TransactionEntity (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    count REAL NOT NULL,
+    amount REAL NOT NULL,
     category TEXT NOT NULL,
     description TEXT NOT NULL,
     date TEXT NOT NULL,
@@ -11,17 +11,41 @@ getAllTransactions:
 SELECT * FROM TransactionEntity;
 
 insertTransaction:
-INSERT INTO TransactionEntity(count, category, description, date, transactionType)
+INSERT INTO TransactionEntity(amount, category, description, date, transactionType)
 VALUES (?, ?, ?, ?, ?);
 
-updateCount:
+updateTransactionCount:
 UPDATE TransactionEntity
-SET count = :count
+SET amount = :amount
 WHERE id IS :id;
 
-delete:
+deleteTransaction:
 DELETE FROM TransactionEntity
 WHERE id IS :id;
 
-deleteAll:
+deleteAllTransactions:
 DELETE FROM TransactionEntity;
+
+CREATE TABLE CategoryEntity (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    data TEXT NOT NULL
+);
+
+getAllCategories:
+SELECT * FROM CategoryEntity;
+
+insertCategory:
+INSERT INTO CategoryEntity(data)
+VALUES (?);
+
+updateCategoryData:
+UPDATE CategoryEntity
+SET data = :data
+WHERE id IS :id;
+
+deleteCategory:
+DELETE FROM CategoryEntity
+WHERE id IS :id;
+
+deleteAllCategories:
+DELETE FROM CategoryEntity;

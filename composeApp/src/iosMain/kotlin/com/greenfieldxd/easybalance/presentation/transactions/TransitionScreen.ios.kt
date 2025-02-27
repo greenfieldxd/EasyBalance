@@ -67,7 +67,7 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, on
             .padding(16.dp)
     ) {
         Text(
-            text = formatToCurrency(transaction.count),
+            text = formatToCurrency(transaction.amount),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.Red

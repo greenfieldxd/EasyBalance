@@ -16,28 +16,30 @@ class TransactionDao(
 ) {
     private val queries  = db.databaseQueries
 
-    suspend fun insert(count: Double, category: String, description: String, date: String, transactionType: Int) = withContext(ioDispatcher) {
-        queries.insertTransaction(count = count, category = category, description = description, date = date, transactionType = transactionType.toLong())
+    suspend fun insert(amount: Double, category: String, description: String, date: String, transactionType: Int) = withContext(ioDispatcher) {
+        queries.insertTransaction(amount = amount, category = category, description = description, date = date, transactionType = transactionType.toLong())
     }
 
-    fun getAll() = queries.getAllTransactions(mapper = { id, count, category, description, date, transactionType ->
+    fun getAll() = queries.getAllTransactions(mapper = { id, amount, category, description, date, transactionType ->
         TransactionModel(
             id = id,
-            count = count,
+            amount = amount,
             category = category,
             description= description,
             date = date,
             transactionType = if (transactionType == TransactionType.INCOME.ordinal.toLong()) TransactionType.INCOME else TransactionType.SPEND
         )
-    }).asFlow().mapToList(Dispatchers.IO)
+    }).asFlow().mapToList(ioDispatcher)
 
-    suspend fun updateCount(id: Long, count: Double) = withContext(ioDispatcher) {
-        queries.updateCount(id = id, count = count)
+    suspend fun updateAmount(id: Long, amount: Double) = withContext(ioDispatcher) {
+        queries.updateTransactionCount(id = id, amount = amount)
     }
 
     suspend fun delete(id: Long) = withContext(ioDispatcher) {
-        queries.delete(id = id)
+        queries.deleteTransaction(id = id)
     }
 
-    suspend fun deleteAll()  = withContext(ioDispatcher) { queries.deleteAll() }
+    suspend fun deleteAll()  = withContext(ioDispatcher) {
+        queries.deleteAllTransactions()
+    }
 }

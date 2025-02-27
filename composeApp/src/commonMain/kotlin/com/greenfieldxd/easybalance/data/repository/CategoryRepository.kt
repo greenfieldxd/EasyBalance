@@ -1,40 +1,56 @@
 package com.greenfieldxd.easybalance.data.repository
 
+import com.greenfieldxd.easybalance.data.database.CategoryDao
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+
 interface CategoryRepository {
     fun getCategory(description: String): Pair<String, String>
 }
 
-class CategoryRepositoryImpl : CategoryRepository {
-    override fun getCategory(description: String): Pair<String, String> {
+class CategoryRepositoryImpl(
+    private val categoryDao: CategoryDao
+) : CategoryRepository {
+
+    private val categoriesFlow = categoryDao.getAll()
+
+    init {
+        initializeCategoriesIfEmpty()
+    }
+
+    private fun initializeCategoriesIfEmpty() = runBlocking {
+        val categories = categoriesFlow.first()
+        if (categories.isEmpty()) {
+            for (category in CategoryDefaultDataSource.categories) {
+                categoryDao.insert(category)
+            }
+        }
+    }
+
+    override fun getCategory(description: String): Pair<String, String> = runBlocking {
+        val categories = categoriesFlow.first()
         val normalizedDesc = description.lowercase()
 
-        // Проверяем каждую категорию
-        for (category in CategoryDataSource.categories) {
+        for (category in categories) {
             if (fuzzyMatchWord(category.name.lowercase(), normalizedDesc)) {
-                return category.name to "Не определено"
+                return@runBlocking category.name to "Не определено"
             }
-            // Затем перебираем ключевые слова
             for (keyword in category.keywords) {
                 if (fuzzyMatchWord(keyword.lowercase(), normalizedDesc)) {
-                    return category.name to keyword
+                    return@runBlocking category.name to keyword
                 }
             }
         }
-        return "Разное" to "Не определено"
+        return@runBlocking "Разное" to "Не определено"
     }
 
-    // Функция fuzzyMatchWord разбивает текст на токены и проверяет каждое на приближенность к искомому слову
     private fun fuzzyMatchWord(word: String, text: String, threshold: Double = 0.3): Boolean {
-        // Разбиваем текст на отдельные слова (токены)
         val tokens = text.split(Regex("[\\s,.;:!?]+"))
         for (token in tokens) {
-            // Если токен точно равен искомому слову, сразу возвращаем true
             if (token.equals(word, ignoreCase = true)) {
                 return true
             }
-            // Вычисляем расстояние Левенштейна между токеном и словом
             val distance = levenshteinDistance(token.lowercase(), word.lowercase())
-            // Вычисляем относительное соотношение ошибки
             val ratio = distance.toDouble() / word.length.toDouble()
             if (ratio <= threshold) {
                 return true
@@ -43,7 +59,6 @@ class CategoryRepositoryImpl : CategoryRepository {
         return false
     }
 
-    // Реализация алгоритма Левенштейна для оценки похожести строк
     private fun levenshteinDistance(a: String, b: String): Int {
         if (a == b) return 0
         if (a.isEmpty()) return b.length
@@ -60,9 +75,9 @@ class CategoryRepositoryImpl : CategoryRepository {
             for (j in 1..b.length) {
                 val cost = if (a[i - 1] == b[j - 1]) 0 else 1
                 dp[i][j] = minOf(
-                    dp[i - 1][j] + 1,    // удаление
-                    dp[i][j - 1] + 1,    // вставка
-                    dp[i - 1][j - 1] + cost  // замена
+                    dp[i - 1][j] + 1,
+                    dp[i][j - 1] + 1,
+                    dp[i - 1][j - 1] + cost
                 )
             }
         }

@@ -16,7 +16,7 @@ class TransactionScreenModel(
     val transactions = transactionDao.getAll().map { transactions -> transactions.sortedByDescending { it.date } }
     val balance = transactionDao.getAll().map { transactionModels ->
         transactionModels.sumOf {
-            if (it.transactionType == TransactionType.INCOME) it.count else -it.count
+            if (it.transactionType == TransactionType.INCOME) it.amount else -it.amount
         }
     }
 
