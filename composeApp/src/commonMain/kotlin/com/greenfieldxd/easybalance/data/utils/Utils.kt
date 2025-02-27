@@ -3,6 +3,15 @@ package com.greenfieldxd.easybalance.data.utils
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.math.floor
+import kotlin.math.pow
+
+expect fun formatToCurrency(amount: Double, locale: String = "be_BY"): String
+
+fun truncateToDecimals(value: Double, decimals: Int): Double {
+    val factor = 10.0.pow(decimals)
+    return floor(value * factor) / factor
+}
 
 fun todayDateTime(): String {
     val now = Clock.System.now()

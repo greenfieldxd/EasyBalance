@@ -37,7 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.greenfieldxd.easybalance.data.TransactionType
-import com.greenfieldxd.easybalance.data.utils.formatNumber
+import com.greenfieldxd.easybalance.data.utils.formatToCurrency
 import com.greenfieldxd.easybalance.domain.TransactionModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 
@@ -105,7 +105,7 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, on
         ){
             Text(
                 modifier = Modifier.weight(1f),
-                text = "${formatNumber(transaction.count)} BYN",
+                text = formatToCurrency(transaction.count),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.Red

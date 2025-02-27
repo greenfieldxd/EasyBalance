@@ -14,13 +14,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.greenfieldxd.easybalance.data.TransactionType
-import com.greenfieldxd.easybalance.data.utils.formatNumber
+import com.greenfieldxd.easybalance.data.utils.formatToCurrency
 import com.greenfieldxd.easybalance.domain.TransactionModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 import com.greenfieldxd.easybalance.presentation.CustomSwipeBox
@@ -68,7 +67,7 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, on
             .padding(16.dp)
     ) {
         Text(
-            text = "${formatNumber(transaction.count)} BYN",
+            text = formatToCurrency(transaction.count),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.Red

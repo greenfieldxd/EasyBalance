@@ -1,8 +1,6 @@
 package com.greenfieldxd.easybalance.presentation.transactions
 
-import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -23,9 +21,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -38,14 +34,12 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.greenfieldxd.easybalance.data.TransactionType
-import com.greenfieldxd.easybalance.data.utils.formatNumber
+import com.greenfieldxd.easybalance.data.utils.formatToCurrency
 import com.greenfieldxd.easybalance.domain.TransactionModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 import com.greenfieldxd.easybalance.presentation.CustomButton
 import com.greenfieldxd.easybalance.presentation.CustomTextField
-import com.greenfieldxd.easybalance.presentation.CustomToggleButton
 import com.greenfieldxd.easybalance.presentation.analytics.AnalyticsScreen
-import kotlinx.coroutines.launch
 
 class TransitionScreen : Screen {
 
@@ -82,7 +76,7 @@ class TransitionScreen : Screen {
             HeaderSection(navigator)
             Spacer(modifier = Modifier.height(16.dp))
             BalanceSection(
-                balance = totalBalance,
+                balance = formatToCurrency(amount = totalBalance),
                 transactionType = transactionType,
                 onTypeChange = { transactionType = it },
                 input = input,
@@ -117,7 +111,7 @@ fun HeaderSection(navigator: Navigator) {
 
 @Composable
 fun BalanceSection(
-    balance: Double,
+    balance: String,
     input: String,
     transactionType: TransactionType,
     onTypeChange: (TransactionType) -> Unit,
@@ -143,7 +137,7 @@ fun BalanceSection(
         Text(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            text = "${formatNumber(balance)} BYN",
+            text = balance,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             color = AppColors.OnBackground
