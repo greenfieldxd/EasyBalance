@@ -1,47 +1,55 @@
 package com.greenfieldxd.easybalance.data.repository
 
 import com.greenfieldxd.easybalance.data.database.CategoryDao
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 interface CategoryRepository {
-    fun getCategory(description: String): Pair<String, String>
+    suspend fun getCategory(description: String): Pair<String, String>
 }
 
 class CategoryRepositoryImpl(
     private val categoryDao: CategoryDao
 ) : CategoryRepository {
 
+    private val categoriesCount = categoryDao.getCount()
     private val categoriesFlow = categoryDao.getAll()
 
     init {
         initializeCategoriesIfEmpty()
     }
 
-    private fun initializeCategoriesIfEmpty() = runBlocking {
-        val categories = categoriesFlow.first()
-        if (categories.isEmpty()) {
+    private fun initializeCategoriesIfEmpty() {
+        val count = runBlocking { categoriesCount.first() }
+        if (count == 0L) {
             for (category in CategoryDefaultDataSource.categories) {
                 categoryDao.insert(category)
             }
         }
     }
 
-    override fun getCategory(description: String): Pair<String, String> = runBlocking {
+    override suspend fun getCategory(description: String): Pair<String, String> {
         val categories = categoriesFlow.first()
+        if (categories.isEmpty()) {
+            for (category in CategoryDefaultDataSource.categories) {
+                categoryDao.insert(category)
+            }
+        }
+
         val normalizedDesc = description.lowercase()
 
         for (category in categories) {
             if (fuzzyMatchWord(category.name.lowercase(), normalizedDesc)) {
-                return@runBlocking category.name to "Не определено"
+                return category.name to "Не определено"
             }
             for (keyword in category.keywords) {
                 if (fuzzyMatchWord(keyword.lowercase(), normalizedDesc)) {
-                    return@runBlocking category.name to keyword
+                    return category.name to keyword
                 }
             }
         }
-        return@runBlocking "Разное" to "Не определено"
+        return "Разное" to "Не определено"
     }
 
     private fun fuzzyMatchWord(word: String, text: String, threshold: Double = 0.3): Boolean {

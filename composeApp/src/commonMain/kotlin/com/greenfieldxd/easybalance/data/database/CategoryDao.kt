@@ -2,6 +2,7 @@ package com.greenfieldxd.easybalance.data.database
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOne
 import com.greenfieldxd.easybalance.data.repository.CategoryData
 import com.greenfieldxd.easybalance.domain.CategoryModel
 import databases.Database
@@ -22,6 +23,8 @@ class CategoryDao(
         val jsonString = json.encodeToString(category)
         queries.insertCategory(jsonString)
     }
+
+    fun getCount() = queries.getCategoriesCount().asFlow().mapToOne(ioDispatcher)
 
     fun getAll() = queries.getAllCategories(mapper = { id, data ->
         val categoryData = json.decodeFromString<CategoryData>(data)

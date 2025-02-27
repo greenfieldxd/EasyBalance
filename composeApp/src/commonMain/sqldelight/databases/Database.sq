@@ -31,6 +31,9 @@ CREATE TABLE CategoryEntity (
     data TEXT NOT NULL
 );
 
+getCategoriesCount:
+SELECT COUNT(*) FROM CategoryEntity;
+
 getAllCategories:
 SELECT * FROM CategoryEntity;
 
