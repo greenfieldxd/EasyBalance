@@ -3,6 +3,7 @@ package com.greenfieldxd.easybalance.presentation.transactions
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,11 +28,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.ScreenKey
-import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
@@ -39,11 +37,9 @@ import com.greenfieldxd.easybalance.domain.TransactionModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 import com.greenfieldxd.easybalance.presentation.CustomButton
 import com.greenfieldxd.easybalance.presentation.CustomTextField
-import com.greenfieldxd.easybalance.presentation.analytics.AnalyticsScreen
+import com.greenfieldxd.easybalance.presentation.edit.EditTransitionScreen
 
 class TransitionScreen : Screen {
-
-    override val key: ScreenKey = uniqueScreenKey
 
     @Composable
     override fun Content() {
@@ -59,12 +55,11 @@ class TransitionScreen : Screen {
 
         var previousSize by remember { mutableIntStateOf(0) }
 
-        LaunchedEffect (transactions) {
-            if (transactions.isNotEmpty() && transactions.size > previousSize){
+        LaunchedEffect(transactions) {
+            if (transactions.isNotEmpty() && transactions.size > previousSize) {
                 previousSize = transactions.size
                 scrollState.animateScrollToItem(0)
-            }
-            else previousSize = transactions.size
+            } else previousSize = transactions.size
         }
 
         Column(
@@ -73,7 +68,7 @@ class TransitionScreen : Screen {
                 .background(AppColors.Background)
                 .padding(16.dp)
         ) {
-            HeaderSection(navigator)
+            HeaderSection()
             Spacer(modifier = Modifier.height(16.dp))
             BalanceSection(
                 balance = formatToCurrency(amount = totalBalance),
@@ -87,24 +82,26 @@ class TransitionScreen : Screen {
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
-            TransactionsListSection(transactions, scrollState, onEdit = { }, onDelete = { screenModel.deleteTransaction(it) })
+            TransactionsListSection(
+                transactions,
+                scrollState,
+                onEdit = { navigator.push(EditTransitionScreen(it)) },
+                onDelete = { screenModel.deleteTransaction(it) })
         }
     }
 }
 
 @Composable
-fun HeaderSection(navigator: Navigator) {
-    Row(modifier = Modifier.fillMaxWidth()) {
+fun HeaderSection() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         Text(
             modifier = Modifier.weight(1f),
             text = "Easy Balance",
-            fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
             color = AppColors.OnBackground
-        )
-        CustomButton(
-            text = "Аналитика",
-            onClick = { navigator.push(AnalyticsScreen()) }
         )
     }
 }
@@ -169,7 +166,17 @@ fun BalanceSection(
 }
 
 @Composable
-expect fun TransactionsListSection(transactions: List<TransactionModel>, scrollState: LazyListState, onEdit: () -> Unit, onDelete: (Long) -> Unit)
+expect fun TransactionsListSection(
+    transactions: List<TransactionModel>,
+    scrollState: LazyListState,
+    onEdit: (Long) -> Unit,
+    onDelete: (Long) -> Unit
+)
 
 @Composable
-expect fun TransactionItem(modifier: Modifier = Modifier, transaction: TransactionModel, onEdit: (() -> Unit)? = null, onDelete: ((Long) -> Unit)? = null)
+expect fun TransactionItem(
+    modifier: Modifier = Modifier,
+    transaction: TransactionModel,
+    onEdit: ((Long) -> Unit)? = null,
+    onDelete: ((Long) -> Unit)? = null
+)

@@ -45,7 +45,7 @@ import com.greenfieldxd.easybalance.presentation.AppColors
 actual fun TransactionsListSection(
     transactions: List<TransactionModel>,
     scrollState: LazyListState,
-    onEdit: () -> Unit,
+    onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
 ) {
     val scrollBarVisible by remember {
@@ -92,7 +92,7 @@ actual fun TransactionsListSection(
 }
 
 @Composable
-actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, onEdit: (() -> Unit)?, onDelete: ((Long) -> Unit)?) {
+actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, onEdit: ((Long) -> Unit)?, onDelete: ((Long) -> Unit)?) {
     var extended by remember { mutableStateOf(false) }
     Column(
         modifier = modifier
@@ -112,7 +112,7 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, on
             )
             AnimatedVisibility(extended) {
                 Row {
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = { onEdit?.invoke(transaction.id) }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             tint = AppColors.Green,

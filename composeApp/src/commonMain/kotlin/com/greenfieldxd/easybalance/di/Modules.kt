@@ -5,6 +5,8 @@ import com.greenfieldxd.easybalance.data.repository.CategoryRepositoryImpl
 import com.greenfieldxd.easybalance.domain.TransactionClassifierUseCase
 import com.greenfieldxd.easybalance.domain.TransactionClassifierUseCaseImpl
 import com.greenfieldxd.easybalance.presentation.analytics.AnalyticsScreenModel
+import com.greenfieldxd.easybalance.presentation.edit.EditTransitionScreenModel
+import com.greenfieldxd.easybalance.presentation.settings.SettingsScreenModel
 import com.greenfieldxd.easybalance.presentation.transactions.TransactionScreenModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -22,5 +24,7 @@ val sharedModule = module {
 
     //Screen
     factory { TransactionScreenModel(get(), get()) }
+    factory { EditTransitionScreenModel() }
     factory { AnalyticsScreenModel(get()) }
+    factory { SettingsScreenModel() }
 }

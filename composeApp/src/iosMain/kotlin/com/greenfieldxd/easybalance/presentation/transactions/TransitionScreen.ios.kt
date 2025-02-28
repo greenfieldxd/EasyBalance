@@ -28,7 +28,7 @@ import com.greenfieldxd.easybalance.presentation.CustomSwipeBox
 actual fun TransactionsListSection(
     transactions: List<TransactionModel>,
     scrollState: LazyListState,
-    onEdit: () -> Unit,
+    onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -50,7 +50,7 @@ actual fun TransactionsListSection(
                 items = transactions,
                 key = { it.id }
             ) { transaction ->
-                CustomSwipeBox(modifier = Modifier.animateItem(), onEdit = onEdit, onDelete = { onDelete.invoke(transaction.id) }) {
+                CustomSwipeBox(modifier = Modifier.animateItem(), onEdit = { onEdit.invoke(transaction.id) }, onDelete = { onDelete.invoke(transaction.id) }) {
                     TransactionItem(transaction = transaction)
                 }
             }
@@ -59,7 +59,7 @@ actual fun TransactionsListSection(
 }
 
 @Composable
-actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, onEdit: (() -> Unit)?, onDelete: ((Long) -> Unit)?) {
+actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, onEdit: ((Long) -> Unit)?, onDelete: ((Long) -> Unit)?) {
     Column(
         modifier = modifier
             .fillMaxWidth()
