@@ -1,7 +1,5 @@
 package com.greenfieldxd.easybalance.presentation.transactions
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,6 +33,7 @@ import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
 import com.greenfieldxd.easybalance.domain.TransactionModel
 import com.greenfieldxd.easybalance.presentation.AppColors
+import com.greenfieldxd.easybalance.presentation.ChangeTransactionTypeButton
 import com.greenfieldxd.easybalance.presentation.CustomButton
 import com.greenfieldxd.easybalance.presentation.CustomTextField
 import com.greenfieldxd.easybalance.presentation.edit.EditTransitionScreen
@@ -115,21 +114,6 @@ fun BalanceSection(
     onInputChange: (String) -> Unit,
     onAddClick: () -> Unit
 ) {
-    val transactionText = when (transactionType) {
-        TransactionType.INCOME -> "Доход"
-        TransactionType.SPEND -> "Расход"
-    }
-
-    val targetColor = when (transactionType) {
-        TransactionType.INCOME -> AppColors.Green
-        TransactionType.SPEND -> AppColors.Red
-    }
-
-    val animatedColor by animateColorAsState(
-        targetValue = targetColor,
-        animationSpec = tween(durationMillis = 300)
-    )
-
     Column {
         Text(
             maxLines = 1,
@@ -139,15 +123,7 @@ fun BalanceSection(
             fontWeight = FontWeight.Bold,
             color = AppColors.OnBackground
         )
-        CustomButton(
-            text = transactionText,
-            backgroundColor = animatedColor,
-            onClick = {
-                if (transactionType == TransactionType.INCOME) onTypeChange.invoke(TransactionType.SPEND)
-                else onTypeChange.invoke(TransactionType.INCOME)
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
+        ChangeTransactionTypeButton(transactionType = transactionType, onTypeChange = onTypeChange)
         Spacer(modifier = Modifier.height(16.dp))
         CustomTextField(
             placeholder = "Пример: Такси 12.10",

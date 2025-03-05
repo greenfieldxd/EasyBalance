@@ -24,7 +24,7 @@ val sharedModule = module {
 
     //Screen
     factory { TransactionScreenModel(get(), get()) }
-    factory { EditTransitionScreenModel() }
+    factory { EditTransitionScreenModel(get(), get()) }
     factory { AnalyticsScreenModel(get()) }
     factory { SettingsScreenModel() }
 }

@@ -1,12 +1,24 @@
 package com.greenfieldxd.easybalance.presentation.edit
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -18,7 +30,11 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.greenfieldxd.easybalance.domain.TransactionModel
+import com.greenfieldxd.easybalance.presentation.AppColors
+import com.greenfieldxd.easybalance.presentation.ChangeTransactionTypeButton
 import com.greenfieldxd.easybalance.presentation.CustomButton
+import com.greenfieldxd.easybalance.presentation.CustomTextField
 
 class EditTransitionScreen(val id: Long) : Screen {
 
@@ -28,18 +44,118 @@ class EditTransitionScreen(val id: Long) : Screen {
     override fun Content() {
         val screenModel = koinScreenModel<EditTransitionScreenModel>()
         val navigator = LocalNavigator.currentOrThrow
+        val transaction by screenModel.transactionState.collectAsState()
 
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        LaunchedEffect(id) {
+            screenModel.loadTransaction(id)
+        }
+
+        transaction?.let {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                EditTransactionItem(
+                    transaction = it,
+                    onSave = {
+                    screenModel.updateTransaction(it)
+                    navigator.pop()
+                    },
+                    onCancel = { navigator.pop() }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        } ?: run {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Транзакцию не удалось загрузить", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+            }
+        }
+    }
+}
+
+@Composable
+fun EditTransactionItem(
+    modifier: Modifier = Modifier,
+    transaction: TransactionModel,
+    onSave: (TransactionModel) -> Unit,
+    onCancel: () -> Unit
+) {
+    var amount by remember { mutableStateOf(transaction.amount.toString()) }
+    var category by remember { mutableStateOf(transaction.category) }
+    var description by remember { mutableStateOf(transaction.description) }
+    var transactionType by remember { mutableStateOf(transaction.transactionType) }
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .background(color = AppColors.Surface, MaterialTheme.shapes.medium)
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "Редактирование транзакции",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        ChangeTransactionTypeButton(transactionType, onTypeChange = { transactionType = it })
+        Spacer(modifier = Modifier.height(16.dp))
+
+        CustomTextField(
+            value = amount,
+            onValueChange = { amount = it },
+            placeholder = "Сумма",
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        CustomTextField(
+            value = category,
+            onValueChange = { category = it },
+           placeholder = "Категория",
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        CustomTextField(
+            value = description,
+            onValueChange = { description = it },
+            placeholder = "Описание",
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("Редактировать транзакцию ID: $id",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
+            CustomButton(
+                modifier = Modifier.weight(0.5f),
+                text = "Сохранить",
+                onClick = {
+                    val updatedTransaction = TransactionModel(
+                        id = transaction.id,
+                        amount = amount.toDoubleOrNull() ?: transaction.amount,
+                        category = category,
+                        description = description,
+                        date = transaction.date,
+                        transactionType = transactionType
+                    )
+                    onSave(updatedTransaction)
+                }
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            CustomButton(text = "Назад", onClick = { navigator.pop() })
+            CustomButton(
+                modifier = Modifier.weight(0.5f),
+                text = "Отмена",
+                backgroundColor = AppColors.Red,
+                onClick = { onCancel() }
+            )
         }
     }
 }

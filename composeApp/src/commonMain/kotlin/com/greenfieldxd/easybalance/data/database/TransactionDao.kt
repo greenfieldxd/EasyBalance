@@ -20,6 +20,20 @@ class TransactionDao(
         queries.insertTransaction(amount = amount, category = category, description = description, date = date, transactionType = transactionType.toLong())
     }
 
+    suspend fun get(id: Long): TransactionModel? = withContext(ioDispatcher) {
+        val transactionEntity = queries.getTransaction(id = id).executeAsOneOrNull()
+            ?: return@withContext null
+
+        return@withContext TransactionModel(
+                id = transactionEntity.id,
+                amount = transactionEntity.amount,
+                category = transactionEntity.category,
+                description = transactionEntity.description,
+                date = transactionEntity.date,
+                transactionType = if (transactionEntity.transactionType == TransactionType.INCOME.ordinal.toLong()) TransactionType.INCOME else TransactionType.SPEND
+        )
+    }
+
     fun getAll() = queries.getAllTransactions(mapper = { id, amount, category, description, date, transactionType ->
         TransactionModel(
             id = id,
@@ -31,8 +45,13 @@ class TransactionDao(
         )
     }).asFlow().mapToList(ioDispatcher)
 
-    suspend fun updateAmount(id: Long, amount: Double) = withContext(ioDispatcher) {
-        queries.updateTransactionCount(id = id, amount = amount)
+    suspend fun updateTransaction(id: Long, transaction: TransactionModel) = withContext(ioDispatcher) {
+        queries.updateTransaction(
+            id = id,
+            amount = transaction.amount,
+            category = transaction.category,
+            description = transaction.description,
+            transactionType = transaction.transactionType.ordinal.toLong())
     }
 
     suspend fun delete(id: Long) = withContext(ioDispatcher) {
