@@ -1,6 +1,7 @@
 package com.greenfieldxd.easybalance.data.utils
 
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.math.floor
@@ -13,16 +14,16 @@ fun truncateToDecimals(value: Double, decimals: Int): Double {
     return floor(value * factor) / factor
 }
 
-fun todayDateTime(): String {
-    val now = Clock.System.now()
-    val zone = TimeZone.currentSystemDefault()
-    val localDateTime = now.toLocalDateTime(zone)
+fun todayDateTime(): String = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString()
 
-    val date = localDateTime.date.toString().substring(8, 10) + "." +
-            localDateTime.date.toString().substring(5, 7) + "." +
-            localDateTime.date.toString().substring(0, 4)
-
-    val time = localDateTime.time.toString().substring(0, 8)
-
-    return "$date $time"
+fun formatDate(dateTime: String): String {
+    val parsedDateTime = LocalDateTime.parse(dateTime)
+    return buildString {
+        append(parsedDateTime.dayOfMonth.toString().padStart(2, '0')).append(".")
+        append(parsedDateTime.monthNumber.toString().padStart(2, '0')).append(".")
+        append(parsedDateTime.year).append(" ")
+        append(parsedDateTime.hour.toString().padStart(2, '0')).append(":")
+        append(parsedDateTime.minute.toString().padStart(2, '0')).append(":")
+        append(parsedDateTime.second.toString().padStart(2, '0'))
+    }
 }

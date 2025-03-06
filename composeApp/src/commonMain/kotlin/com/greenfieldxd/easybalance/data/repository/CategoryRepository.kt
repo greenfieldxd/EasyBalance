@@ -1,7 +1,6 @@
 package com.greenfieldxd.easybalance.data.repository
 
 import com.greenfieldxd.easybalance.data.database.CategoryDao
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 

@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.greenfieldxd.easybalance.data.TransactionType
+import com.greenfieldxd.easybalance.data.utils.formatDate
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
 import com.greenfieldxd.easybalance.domain.TransactionModel
 import com.greenfieldxd.easybalance.presentation.AppColors
@@ -88,7 +89,7 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, on
                 color = AppColors.OnSurface
             )
             Text(
-                text = transaction.date,
+                text = formatDate(transaction.date),
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Normal,
                 color = AppColors.OnSurface

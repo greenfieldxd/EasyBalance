@@ -227,17 +227,30 @@ fun CustomSwipeBox(
             .pointerInput(Unit) {
                 detectHorizontalDragGestures(
                     onDragEnd = {
-                        when {
-                            offsetX.value <= -maxSwipePx * swipeThreshold -> onDelete()
-                            offsetX.value >= maxSwipePx * swipeThreshold -> onEdit()
+                        val targetOffset = when {
+                            offsetX.value <= -maxSwipePx * swipeThreshold -> -maxSwipePx * 2.5f
+                            offsetX.value >= maxSwipePx * swipeThreshold -> maxSwipePx * 2.5f
+                            else -> 0f
                         }
+
                         scope.launch {
+                            offsetX.animateTo(
+                                targetValue = targetOffset,
+                                animationSpec = tween(300)
+                            )
+
+                            when {
+                                targetOffset < 0 -> onDelete()
+                                targetOffset > 0 -> onEdit()
+                            }
+
                             offsetX.animateTo(
                                 targetValue = 0f,
                                 animationSpec = tween(300)
                             )
                         }
                     }
+
                 ) { change, dragAmount ->
                     change.consume()
                     val newOffset = offsetX.value + dragAmount

@@ -17,6 +17,8 @@ class EditTransitionScreenModel(
     private val _transactionState = MutableStateFlow<TransactionModel?>(null)
     val transactionState = _transactionState.asStateFlow()
 
+    val categories = categoryDao.getAll()
+
     fun loadTransaction(id: Long) {
         screenModelScope.launch {
             val transaction = transactionDao.get(id)

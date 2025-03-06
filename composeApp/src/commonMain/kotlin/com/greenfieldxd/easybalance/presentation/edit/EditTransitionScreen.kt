@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +29,7 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.greenfieldxd.easybalance.domain.CategoryModel
 import com.greenfieldxd.easybalance.domain.TransactionModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 import com.greenfieldxd.easybalance.presentation.ChangeTransactionTypeButton
@@ -44,27 +44,31 @@ class EditTransitionScreen(val id: Long) : Screen {
     override fun Content() {
         val screenModel = koinScreenModel<EditTransitionScreenModel>()
         val navigator = LocalNavigator.currentOrThrow
+
+        val categories by screenModel.categories.collectAsState(emptyList())
         val transaction by screenModel.transactionState.collectAsState()
 
         LaunchedEffect(id) {
             screenModel.loadTransaction(id)
         }
 
-        transaction?.let {
+        transaction?.let { transactionModel ->
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                EditTransactionItem(
-                    transaction = it,
-                    onSave = {
-                    screenModel.updateTransaction(it)
-                    navigator.pop()
-                    },
-                    onCancel = { navigator.pop() }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+                if (categories.isNotEmpty()) {
+                    EditTransactionItem(
+                        transaction = transactionModel,
+                        categories = categories,
+                        onSave = {
+                            screenModel.updateTransaction(it)
+                            navigator.pop()
+                        },
+                        onCancel = { navigator.pop() }
+                    )
+                }
             }
         } ?: run {
             Column(
@@ -72,7 +76,7 @@ class EditTransitionScreen(val id: Long) : Screen {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Транзакцию не удалось загрузить", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                Text("Транзакция загружается...", fontSize = 16.sp, fontWeight = FontWeight.Medium)
             }
         }
     }
@@ -81,6 +85,7 @@ class EditTransitionScreen(val id: Long) : Screen {
 @Composable
 fun EditTransactionItem(
     modifier: Modifier = Modifier,
+    categories: List<CategoryModel>,
     transaction: TransactionModel,
     onSave: (TransactionModel) -> Unit,
     onCancel: () -> Unit
@@ -92,45 +97,31 @@ fun EditTransactionItem(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .background(color = AppColors.Surface, MaterialTheme.shapes.medium)
+            .fillMaxSize()
             .padding(16.dp)
+            .background(color = AppColors.Surface, MaterialTheme.shapes.medium)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             text = "Редактирование транзакции",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
         )
-        Spacer(modifier = Modifier.height(8.dp))
-
         ChangeTransactionTypeButton(transactionType, onTypeChange = { transactionType = it })
-        Spacer(modifier = Modifier.height(16.dp))
-
-        CustomTextField(
-            value = amount,
-            onValueChange = { amount = it },
-            placeholder = "Сумма",
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        CustomTextField(
-            value = category,
-            onValueChange = { category = it },
-           placeholder = "Категория",
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
+        CategoryPicker(initCategory = category, categories = categories, onSelected = { category = it.name })
         CustomTextField(
             value = description,
             onValueChange = { description = it },
             placeholder = "Описание",
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(16.dp))
-
+        CustomTextField(
+            value = amount,
+            onValueChange = { amount = it },
+            placeholder = "Сумма",
+            modifier = Modifier.fillMaxWidth()
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -159,3 +150,6 @@ fun EditTransactionItem(
         }
     }
 }
+
+@Composable
+expect fun CategoryPicker(initCategory: String, categories: List<CategoryModel>, onSelected: (CategoryModel) -> Unit)

@@ -7,13 +7,14 @@ import com.greenfieldxd.easybalance.data.database.TransactionDao
 import com.greenfieldxd.easybalance.domain.TransactionClassifierUseCase
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 
 class TransactionScreenModel(
     private val transactionClassifierUseCase: TransactionClassifierUseCase,
     private val transactionDao: TransactionDao
 ) : ScreenModel {
 
-    val transactions = transactionDao.getAll().map { transactions -> transactions.sortedByDescending { it.date } }
+    val transactions = transactionDao.getAll().map { transactions -> transactions.sortedByDescending { LocalDateTime.parse(it.date) } }
     val balance = transactionDao.getAll().map { transactionModels ->
         transactionModels.sumOf {
             if (it.transactionType == TransactionType.INCOME) it.amount else -it.amount
