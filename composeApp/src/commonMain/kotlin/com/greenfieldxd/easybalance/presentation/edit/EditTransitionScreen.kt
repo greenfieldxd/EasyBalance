@@ -54,7 +54,7 @@ class EditTransitionScreen(val id: Long) : Screen {
 
         transaction?.let { transactionModel ->
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -96,11 +96,7 @@ fun EditTransactionItem(
     var transactionType by remember { mutableStateOf(transaction.transactionType) }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .background(color = AppColors.Surface, MaterialTheme.shapes.medium)
-            .padding(16.dp),
+        modifier = modifier.background(color = AppColors.Surface, MaterialTheme.shapes.medium).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(

@@ -6,8 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import cafe.adriel.voyager.transitions.SlideOrientation
+import cafe.adriel.voyager.transitions.SlideTransition
 import com.greenfieldxd.easybalance.presentation.settings.SettingsScreen
 import com.greenfieldxd.easybalance.presentation.settings.SettingsScreenModel
 
@@ -30,7 +33,8 @@ class SettingsTab : Tab {
 
     @Composable
     override fun Content() {
-        val screenModel = koinScreenModel<SettingsScreenModel>()
-        SettingsScreen(screenModel)
+        Navigator(SettingsScreen()) { navigator ->
+            SlideTransition(navigator, orientation = SlideOrientation.Vertical)
+        }
     }
 }

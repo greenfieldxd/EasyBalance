@@ -5,6 +5,7 @@ import com.greenfieldxd.easybalance.data.repository.CategoryRepositoryImpl
 import com.greenfieldxd.easybalance.domain.TransactionClassifierUseCase
 import com.greenfieldxd.easybalance.domain.TransactionClassifierUseCaseImpl
 import com.greenfieldxd.easybalance.presentation.analytics.AnalyticsScreenModel
+import com.greenfieldxd.easybalance.presentation.edit.EditCategoryScreenModel
 import com.greenfieldxd.easybalance.presentation.edit.EditTransitionScreenModel
 import com.greenfieldxd.easybalance.presentation.settings.SettingsScreenModel
 import com.greenfieldxd.easybalance.presentation.transactions.TransactionScreenModel
@@ -25,6 +26,7 @@ val sharedModule = module {
     //Screen
     factory { TransactionScreenModel(get(), get()) }
     factory { EditTransitionScreenModel(get(), get()) }
+    factory { EditCategoryScreenModel(get()) }
     factory { AnalyticsScreenModel(get()) }
     factory { SettingsScreenModel() }
 }
