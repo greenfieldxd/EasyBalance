@@ -1,4 +1,4 @@
-package com.greenfieldxd.easybalance.presentation.edit
+package com.greenfieldxd.easybalance.presentation.category
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,13 +30,13 @@ import com.greenfieldxd.easybalance.domain.CategoryModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 import com.greenfieldxd.easybalance.presentation.CustomButton
 
-class EditCategoryScreen : Screen {
+class CategoryScreen : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
 
     @Composable
     override fun Content() {
-        val screenModel = koinScreenModel<EditCategoryScreenModel>()
+        val screenModel = koinScreenModel<CategoryScreenModel>()
         val navigator = LocalNavigator.currentOrThrow
 
         val categories by screenModel.categories.collectAsState(emptyList())
@@ -47,61 +47,31 @@ class EditCategoryScreen : Screen {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Редактирование категорий",
+                text = "Категории",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
             )
-            CustomGrid(
-                modifier = Modifier.weight(0.7f),
-                items = categories,
-                columns = 3
-            ) { category ->
-                CustomButton(
-                    modifier = Modifier.fillMaxWidth().aspectRatio(2.5f),
-                    text = category.name,
-                    backgroundColor = AppColors.Surface,
-                    contentColor = AppColors.OnSurface,
-                    onClick = { }
-                )
+            LazyColumn (
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+            ){
+                items(categories) { category ->
+                    CustomButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = category.name,
+                        backgroundColor = AppColors.Surface,
+                        contentColor = AppColors.OnSurface,
+                        textSize = 14.sp,
+                        onClick = { }
+                    )
+                }
             }
             CustomButton(
                 modifier = Modifier,
-                text = "Отмена",
+                text = "Назад",
                 backgroundColor = AppColors.Red,
                 onClick = { navigator.pop() }
             )
-        }
-    }
-}
-
-@Composable
-fun CustomGrid(
-    modifier: Modifier = Modifier,
-    items: List<CategoryModel>,
-    columns: Int,
-    content: @Composable (CategoryModel) -> Unit
-) {
-    LazyColumn(modifier = modifier) {
-        items(items.chunked(columns)) { rowItems ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 2.dp),
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                rowItems.forEach { item ->
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(2.dp)
-                    ) {
-                        content(item)
-                    }
-                }
-                repeat(columns - rowItems.size) {
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-            }
         }
     }
 }

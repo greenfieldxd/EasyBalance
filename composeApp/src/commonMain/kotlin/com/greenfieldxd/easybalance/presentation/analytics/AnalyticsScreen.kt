@@ -40,7 +40,6 @@ fun AddCustomPieChart() {
         borderColor = Color.White,
         donutPercentage = 40f,
         borderWidth = 4f,
-        pieColors = pieColors,
     )
 
     val dataSet = ChartDataSet(

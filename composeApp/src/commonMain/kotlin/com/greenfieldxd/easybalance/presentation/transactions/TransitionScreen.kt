@@ -36,7 +36,6 @@ import com.greenfieldxd.easybalance.presentation.AppColors
 import com.greenfieldxd.easybalance.presentation.ChangeTransactionTypeButton
 import com.greenfieldxd.easybalance.presentation.CustomButton
 import com.greenfieldxd.easybalance.presentation.CustomTextField
-import com.greenfieldxd.easybalance.presentation.edit.EditTransitionScreen
 
 class TransitionScreen : Screen {
 

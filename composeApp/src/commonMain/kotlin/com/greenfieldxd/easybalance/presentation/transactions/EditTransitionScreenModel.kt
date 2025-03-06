@@ -1,4 +1,4 @@
-package com.greenfieldxd.easybalance.presentation.edit
+package com.greenfieldxd.easybalance.presentation.transactions
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope

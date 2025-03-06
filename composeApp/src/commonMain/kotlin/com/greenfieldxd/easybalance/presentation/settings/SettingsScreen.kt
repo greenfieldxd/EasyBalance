@@ -16,7 +16,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.greenfieldxd.easybalance.presentation.CustomButton
-import com.greenfieldxd.easybalance.presentation.edit.EditCategoryScreen
+import com.greenfieldxd.easybalance.presentation.category.CategoryScreen
 
 class SettingsScreen : Screen {
 
@@ -34,7 +34,7 @@ class SettingsScreen : Screen {
                 fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(16.dp))
-            CustomButton(text = "Изменить категории", onClick = { navigator.push(EditCategoryScreen()) })
+            CustomButton(text = "Категории", onClick = { navigator.push(CategoryScreen()) })
         }
     }
 }

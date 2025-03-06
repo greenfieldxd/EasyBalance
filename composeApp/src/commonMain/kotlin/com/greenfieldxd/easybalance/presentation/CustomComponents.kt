@@ -26,11 +26,13 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
@@ -167,7 +169,8 @@ fun CustomButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = AppColors.Primary,
-    contentColor: Color = AppColors.OnPrimary
+    contentColor: Color = AppColors.OnPrimary,
+    textSize: TextUnit = 16.sp
 ) {
     Button(
         modifier = modifier,
@@ -179,7 +182,7 @@ fun CustomButton(
         ),
         shape = RoundedCornerShape(8.dp),
     ) {
-        Text(text = text, fontSize = 16.sp)
+        Text(text = text, fontSize = textSize)
     }
 }
 

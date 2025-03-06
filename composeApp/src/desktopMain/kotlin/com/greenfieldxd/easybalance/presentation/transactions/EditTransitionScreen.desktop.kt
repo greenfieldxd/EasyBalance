@@ -1,4 +1,4 @@
-package com.greenfieldxd.easybalance.presentation.edit
+package com.greenfieldxd.easybalance.presentation.transactions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
