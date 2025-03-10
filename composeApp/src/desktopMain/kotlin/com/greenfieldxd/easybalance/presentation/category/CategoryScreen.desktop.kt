@@ -18,14 +18,19 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.greenfieldxd.easybalance.data.repository.CategoryData
 import com.greenfieldxd.easybalance.presentation.AppColors
 import com.greenfieldxd.easybalance.presentation.CustomButton
 
@@ -35,10 +40,18 @@ actual fun CategorySection(
     scrollState: LazyListState,
 ) {
     val categories by screenModel.categories.collectAsState(emptyList())
+    var isCategoryCreated by remember { mutableStateOf(false) }
     val scrollBarVisible by remember {
         derivedStateOf {
             val canScroll = scrollState.canScrollForward || scrollState.canScrollBackward
             canScroll
+        }
+    }
+
+    LaunchedEffect(isCategoryCreated) {
+        if (isCategoryCreated && categories.isNotEmpty()) {
+            scrollState.animateScrollToItem(categories.lastIndex)
+            isCategoryCreated = false
         }
     }
 
@@ -49,7 +62,7 @@ actual fun CategorySection(
             VerticalScrollbar(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
-                    .fillMaxHeight().padding(top = 56.dp),
+                    .fillMaxHeight().padding(top = 96.dp),
                 adapter = rememberScrollbarAdapter(scrollState)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -60,21 +73,35 @@ actual fun CategorySection(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Категории",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = AppColors.OnBackground
+                )
                 Row (
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
+                    CustomButton(
                         modifier = Modifier.weight(1f),
-                        text = "Категории",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = AppColors.OnBackground
+                        text = "Создать категорию",
+                        onClick = {
+                            val data = CategoryData(
+                                name = "Шаблон категории",
+                                keywords = listOf("Ключевые слова"),
+                                color = AppColors.Primary.toArgb()
+                            )
+                            screenModel.create(data)
+                            isCategoryCreated = true
+                        }
                     )
                     CustomButton(
+                        modifier = Modifier.weight(1f),
                         text = "Сбросить категории",
-                        backgroundColor = AppColors.Background,
-                        contentColor = AppColors.OnBackground,
+                        backgroundColor = AppColors.Red,
                         onClick = { screenModel.returnToDefault() }
                     )
                 }
