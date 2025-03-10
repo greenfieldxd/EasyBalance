@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -25,9 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.navigator.Navigator
-import com.greenfieldxd.easybalance.domain.CategoryModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 import com.greenfieldxd.easybalance.presentation.CustomButton
 
@@ -35,10 +33,8 @@ import com.greenfieldxd.easybalance.presentation.CustomButton
 actual fun CategorySection(
     screenModel: CategoryScreenModel,
     scrollState: LazyListState,
-    navigator: Navigator,
-    categories: List<CategoryModel>
 ) {
-
+    val categories by screenModel.categories.collectAsState(emptyList())
     val scrollBarVisible by remember {
         derivedStateOf {
             val canScroll = scrollState.canScrollForward || scrollState.canScrollBackward
@@ -53,7 +49,7 @@ actual fun CategorySection(
             VerticalScrollbar(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
-                    .fillMaxHeight().padding(top = 32.dp),
+                    .fillMaxHeight().padding(top = 56.dp),
                 adapter = rememberScrollbarAdapter(scrollState)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -71,7 +67,7 @@ actual fun CategorySection(
                     Text(
                         modifier = Modifier.weight(1f),
                         text = "Категории",
-                        style = MaterialTheme.typography.headlineLarge,
+                        style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         color = AppColors.OnBackground
                     )

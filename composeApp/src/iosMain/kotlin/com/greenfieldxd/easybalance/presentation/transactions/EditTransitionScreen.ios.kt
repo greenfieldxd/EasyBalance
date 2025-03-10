@@ -41,8 +41,7 @@ actual fun CategoryPicker(
             CustomButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = category.name,
-                backgroundColor = if (selected) AppColors.Primary else AppColors.LightGray,
-                contentColor = if (selected) AppColors.OnPrimary else AppColors.OnSurface,
+                backgroundColor = if (selected) category.color else AppColors.LightGray,
                 onClick = {
                     selectedCategory = category.name
                     onSelected.invoke(category)

@@ -1,41 +1,22 @@
 package com.greenfieldxd.easybalance.presentation.category
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -58,23 +39,15 @@ import com.greenfieldxd.easybalance.presentation.AppColors
 import com.greenfieldxd.easybalance.presentation.CustomButton
 import com.greenfieldxd.easybalance.presentation.CustomTextField
 
-class CategoryScreen : Screen {
+@Composable
+fun CategoryScreen(screenModel: CategoryScreenModel) {
+    val scrollState = rememberLazyListState()
 
-    override val key: ScreenKey = uniqueScreenKey
-
-    @Composable
-    override fun Content() {
-        val screenModel = koinScreenModel<CategoryScreenModel>()
-        val navigator = LocalNavigator.currentOrThrow
-        val categories by screenModel.categories.collectAsState(emptyList())
-        val scrollState = rememberLazyListState()
-
-        CategorySection(screenModel, scrollState, navigator, categories)
-    }
+    CategorySection(screenModel, scrollState)
 }
 
 @Composable
-expect fun CategorySection(screenModel: CategoryScreenModel, scrollState: LazyListState, navigator: Navigator, categories: List<CategoryModel>)
+expect fun CategorySection(screenModel: CategoryScreenModel, scrollState: LazyListState)
 
 @Composable
 fun CategoryItem(
@@ -136,13 +109,11 @@ fun CategoryItem(
                 CustomTextField(
                     placeholder = "Категория",
                     value = categoryInput,
-                    borderColor = category.color,
                     onValueChange = { categoryInput = it }
                 )
                 CustomTextField(
                     placeholder = "Ключевые слова",
                     value = keywordsInput,
-                    borderColor = category.color,
                     onValueChange = { keywordsInput = it }
                 )
                 Row (
@@ -151,7 +122,7 @@ fun CategoryItem(
                 ){
                     CustomButton(
                         modifier = Modifier.weight(0.5f),
-                        backgroundColor = AppColors.Green,
+                        backgroundColor = AppColors.Primary,
                         text = "Сохранить",
                         textSize = 12.sp,
                         onClick = {

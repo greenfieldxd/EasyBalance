@@ -93,54 +93,62 @@ fun EditTransactionItem(
     var description by remember { mutableStateOf(transaction.description) }
     var transactionType by remember { mutableStateOf(transaction.transactionType) }
 
-    Column(
-        modifier = modifier.background(color = AppColors.Surface, MaterialTheme.shapes.medium).padding(16.dp),
+    Column (
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
+    ){
         Text(
             text = "Редактирование транзакции",
-            fontSize = 20.sp,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
+            color = AppColors.OnBackground
         )
-        ChangeTransactionTypeButton(transactionType, onTypeChange = { transactionType = it })
-        CategoryPicker(initCategory = category, categories = categories, onSelected = { category = it.name })
-        CustomTextField(
-            value = description,
-            onValueChange = { description = it },
-            placeholder = "Описание",
-            modifier = Modifier.fillMaxWidth()
-        )
-        CustomTextField(
-            value = amount,
-            onValueChange = { amount = it },
-            placeholder = "Сумма",
-            modifier = Modifier.fillMaxWidth()
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+
+        Column(
+            modifier = modifier.fillMaxSize().background(color = AppColors.Surface, MaterialTheme.shapes.medium).padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            CustomButton(
-                modifier = Modifier.weight(0.5f),
-                text = "Сохранить",
-                onClick = {
-                    val updatedTransaction = TransactionModel(
-                        id = transaction.id,
-                        amount = amount.toDoubleOrNull() ?: transaction.amount,
-                        category = category,
-                        description = description,
-                        date = transaction.date,
-                        transactionType = transactionType
-                    )
-                    onSave(updatedTransaction)
-                }
+
+            ChangeTransactionTypeButton(transactionType, onTypeChange = { transactionType = it })
+            CategoryPicker(initCategory = category, categories = categories, onSelected = { category = it.name })
+            CustomTextField(
+                value = description,
+                onValueChange = { description = it },
+                placeholder = "Описание",
+                modifier = Modifier.fillMaxWidth()
             )
-            CustomButton(
-                modifier = Modifier.weight(0.5f),
-                text = "Отмена",
-                backgroundColor = AppColors.Red,
-                onClick = { onCancel() }
+            CustomTextField(
+                value = amount,
+                onValueChange = { amount = it },
+                placeholder = "Сумма",
+                modifier = Modifier.fillMaxWidth()
             )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                CustomButton(
+                    modifier = Modifier.weight(0.5f),
+                    text = "Сохранить",
+                    onClick = {
+                        val updatedTransaction = TransactionModel(
+                            id = transaction.id,
+                            amount = amount.toDoubleOrNull() ?: transaction.amount,
+                            category = category,
+                            description = description,
+                            date = transaction.date,
+                            transactionType = transactionType
+                        )
+                        onSave(updatedTransaction)
+                    }
+                )
+                CustomButton(
+                    modifier = Modifier.weight(0.5f),
+                    text = "Отмена",
+                    backgroundColor = AppColors.Red,
+                    onClick = { onCancel() }
+                )
+            }
         }
     }
 }
