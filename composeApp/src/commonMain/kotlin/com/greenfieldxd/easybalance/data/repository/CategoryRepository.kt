@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 interface CategoryRepository {
+    fun trySetDefaultCategories()
     suspend fun getCategory(description: String): Pair<String, String>
 }
 
@@ -16,10 +17,10 @@ class CategoryRepositoryImpl(
     private val categoriesFlow = categoryDao.getAll()
 
     init {
-        initializeCategoriesIfEmpty()
+        trySetDefaultCategories()
     }
 
-    private fun initializeCategoriesIfEmpty() {
+    override fun trySetDefaultCategories() {
         val count = runBlocking { categoriesCount.first() }
         if (count == 0L) {
             for (category in CategoryDefaultDataSource.categories) {

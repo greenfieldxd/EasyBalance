@@ -4,11 +4,12 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.greenfieldxd.easybalance.data.database.CategoryDao
 import com.greenfieldxd.easybalance.data.repository.CategoryData
-import com.greenfieldxd.easybalance.domain.CategoryModel
+import com.greenfieldxd.easybalance.data.repository.CategoryRepository
 import kotlinx.coroutines.launch
 
 class CategoryScreenModel(
-    private val categoryDao: CategoryDao
+    private val categoryDao: CategoryDao,
+    private val categoryRepository: CategoryRepository
 ) : ScreenModel {
     val categories = categoryDao.getAll()
 
@@ -18,7 +19,7 @@ class CategoryScreenModel(
         }
     }
 
-    fun update(id: Long, categoryModel: CategoryModel) {
+    fun update(id: Long, categoryModel: CategoryData) {
         screenModelScope.launch {
             categoryDao.update(id, categoryModel)
         }
@@ -30,9 +31,10 @@ class CategoryScreenModel(
         }
     }
 
-    fun deleteAll() {
+    fun returnToDefault() {
         screenModelScope.launch {
             categoryDao.deleteAll()
+            categoryRepository.trySetDefaultCategories()
         }
     }
 }

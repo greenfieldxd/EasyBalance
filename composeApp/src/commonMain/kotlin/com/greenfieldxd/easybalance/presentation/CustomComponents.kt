@@ -43,6 +43,7 @@ import kotlin.math.roundToInt
 fun CustomTextField(
     placeholder: String,
     value: String,
+    borderColor: Color = AppColors.Primary,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -53,7 +54,7 @@ fun CustomTextField(
         visualTransformation = VisualTransformation.None,
         modifier = modifier
             .background(color = AppColors.Surface, shape = RoundedCornerShape(8.dp))
-            .border(1.dp, AppColors.Primary, shape = RoundedCornerShape(8.dp)),
+            .border(1.dp, borderColor, shape = RoundedCornerShape(8.dp)),
         textStyle = TextStyle(color = AppColors.OnSurface, fontSize = 18.sp)
     ) { innerTextField ->
         Box(modifier = Modifier.padding(8.dp)) {
@@ -127,39 +128,6 @@ fun CustomSlider(
             inactiveTrackColor = backgroundColor,
         )
     )
-}
-
-@Composable
-fun CustomToggleButton(
-    modifier: Modifier = Modifier,
-    isActive: Boolean,
-    text: String,
-    onToggle: (Boolean) -> Unit
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = modifier.padding(16.dp)
-    ) {
-        Text(
-            text = text,
-            fontWeight = FontWeight.Bold,
-            color = if (isActive) AppColors.Green else AppColors.Red,
-            fontSize = 14.sp
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Switch(
-            checked = isActive,
-            onCheckedChange = { onToggle(it) },
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = AppColors.LightGreen,
-                uncheckedThumbColor = AppColors.LightRed,
-                checkedTrackColor = AppColors.Green,
-                uncheckedTrackColor = AppColors.Red,
-                uncheckedBorderColor = AppColors.Red
-            )
-        )
-    }
 }
 
 @Composable

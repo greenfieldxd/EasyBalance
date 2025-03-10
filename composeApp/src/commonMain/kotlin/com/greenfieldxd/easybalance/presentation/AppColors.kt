@@ -3,46 +3,40 @@
 import androidx.compose.ui.graphics.Color
 
 object AppColors {
-    val Primary = Color(0xFF1E88E5) // Primary blue
-    val PrimaryVariant = Color(0xFF0D47A1) // Dark blue
-    val Secondary = Color(0xFFD32F2F) // Primary ded
-    val OnSecondary = Color(0xFFFFFFFF) // White on accent
-    val SecondaryVariant = Color(0xFF9A0007) // Dark red
-    val Background = Color(0xFFF5F5F5) // Light gray background
-    val Surface = Color(0xFFFFFFFF) // Pure white
-    val OnPrimary = Color(0xFFFFFFFF) // White on primary
+    val Primary = Color(0xFF3366BB)
+    val Background = Color(0xFFF0F0F0)
+    val Surface = Color(0xFFFFFFFF)
+    val OnPrimary = Color(0xFFFFFFFF)
+    val OnBackground = Color(0xFF303030)
+    val OnSurface = Color(0xFF1A1A1A)
 
-    val OnBackground = Color(0xFF424242) // Dark gray text
-    val OnSurface = Color(0xFF212121) // Deep black text
+    val Green = Color(0xFF388E3C)
+    val Red = Color(0xFFD32F2F)
+    val LightGray = Color(0xFFB0B0B0)
+}
 
-    val LightGreen = Color(0xFFA5D6A7) // Light green
-    val Green = Color(0xFF43A047) // Standard green
-    val DarkGreen = Color(0xFF1B5E20) // Dark green
+object CategoryColors {
+    val FireRed = Color(0xFFC62828)
+    val SunsetOrange = Color(0xFFF4511E)
+    val BrightPeach = Color(0xFFFF7043)
 
-    val LightRed = Color(0xFFEF5350) // Light red
-    val Red = Color(0xFFD32F2F) // Standard red
-    val DarkRed = Color(0xFF9A0007) // Dark red
+    val RoyalBlue = Color(0xFF1E3A8A)
+    val ElectricBlue = Color(0xFF007BFF)
+    val DeepNavy = Color(0xFF0D1B2A)
 
-    val LightGray = Color(0xFFD3D3D3) // Neutral gray
-    val DarkGray = Color(0xFF424242) // Charcoal gray
+    val RichGold = Color(0xFFFFC400)
+    val WarmAmber = Color(0xFFFF8F00)
+    val GoldenSand = Color(0xFFD4A373)
 
-    val LightYellow = Color(0xFFFFF59D) // Warm yellow
-    val Yellow = Color(0xFFFFD600) // Bright sunny yellow
-    val DarkYellow = Color(0xFFF9A825) // Mustard gold
+    val TealGreen = Color(0xFF00897B)
+    val AquaBlue = Color(0xFF00B8D4)
+    val ForestGreen = Color(0xFF1B5E20)
+    val OliveDrab = Color(0xFF556B2F)
 
-    val LightOrange = Color(0xFFFFCC80) // Peach
-    val Orange = Color(0xFFFB8C00) // Vibrant orange
-    val DarkOrange = Color(0xFFEF6C00) // Deep amber
+    val RoyalPurple = Color(0xFF6A1B9A)
+    val DeepLavender = Color(0xFF9C27B0)
 
-    val LightPurple = Color(0xFFCE93D8) // Light purple
-    val Purple = Color(0xFF8E24AA) // Deep purple
-    val DarkPurple = Color(0xFF4A148C) // Dark eggplant
-
-    val LightTeal = Color(0xFF80DEEA) // Light teal
-    val Teal = Color(0xFF00897B) // Pure teal
-    val DarkTeal = Color(0xFF004D40) // Deep dark teal
-
-    val LightBrown = Color(0xFFBCAAA4) // Coffee beige
-    val Brown = Color(0xFF6D4C41) // Rich brown
-    val DarkBrown = Color(0xFF3E2723) // Deep chocolate brown
+    val CoralRed = Color(0xFFD84315)
+    val VibrantRose = Color(0xFFFF4081)
+    val NeonPink = Color(0xFFFF1493)
 }

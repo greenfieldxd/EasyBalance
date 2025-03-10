@@ -1,5 +1,6 @@
 package com.greenfieldxd.easybalance.data.database
 
+import androidx.compose.ui.graphics.Color
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
@@ -31,11 +32,12 @@ class CategoryDao(
         CategoryModel(
             id = id,
             name = categoryData.name,
-            keywords = categoryData.keywords
+            keywords = categoryData.keywords,
+            color = Color(categoryData.color)
         )
     }).asFlow().mapToList(ioDispatcher)
 
-    suspend fun update(id: Long, category: CategoryModel) = withContext(ioDispatcher) {
+    suspend fun update(id: Long, category: CategoryData) = withContext(ioDispatcher) {
         val jsonString = json.encodeToString(category)
         queries.updateCategoryData(id = id, data = jsonString)
     }

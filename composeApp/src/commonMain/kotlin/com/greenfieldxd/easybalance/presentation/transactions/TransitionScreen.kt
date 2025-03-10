@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,7 @@ class TransitionScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         val transactions by screenModel.transactions.collectAsState(emptyList())
+        val categoriesColorMap by screenModel.categoriesColorMap.collectAsState(emptyMap())
         val totalBalance by screenModel.balance.collectAsState(0.0)
 
         val scrollState = rememberLazyListState()
@@ -81,8 +83,9 @@ class TransitionScreen : Screen {
             )
             Spacer(modifier = Modifier.height(16.dp))
             TransactionsListSection(
-                transactions,
-                scrollState,
+                scrollState = scrollState,
+                transactions = transactions,
+                categoriesColorMap = categoriesColorMap,
                 onEdit = { navigator.push(EditTransitionScreen(it)) },
                 onDelete = { screenModel.deleteTransaction(it) })
         }
@@ -143,6 +146,7 @@ fun BalanceSection(
 @Composable
 expect fun TransactionsListSection(
     transactions: List<TransactionModel>,
+    categoriesColorMap: Map<String, Color>,
     scrollState: LazyListState,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
@@ -152,6 +156,7 @@ expect fun TransactionsListSection(
 expect fun TransactionItem(
     modifier: Modifier = Modifier,
     transaction: TransactionModel,
+    categoryColor: Color,
     onEdit: ((Long) -> Unit)? = null,
     onDelete: ((Long) -> Unit)? = null
 )

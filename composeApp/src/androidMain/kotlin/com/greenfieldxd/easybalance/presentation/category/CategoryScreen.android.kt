@@ -17,10 +17,10 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.Navigator
 import com.greenfieldxd.easybalance.domain.CategoryModel
 import com.greenfieldxd.easybalance.presentation.AppColors
-import com.greenfieldxd.easybalance.presentation.CustomButton
 
 @Composable
 actual fun CategorySection(
+    screenModel: CategoryScreenModel,
     scrollState: LazyListState,
     navigator: Navigator,
     categories: List<CategoryModel>
@@ -41,15 +41,17 @@ actual fun CategorySection(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ){
-            items(categories) { category ->
-                CategoryItem(category)
+            items(
+                items = categories,
+                key = { it.id }
+            ) { category ->
+                CategoryItem(
+                    modifier = Modifier.animateItem(),
+                    category = category,
+                    onDelete = { screenModel.delete(it) },
+                    onSave = { id, data -> screenModel.update(id = id, categoryModel = data) }
+                )
             }
         }
-        CustomButton(
-            modifier = Modifier,
-            text = "Назад",
-            backgroundColor = AppColors.Red,
-            onClick = { navigator.pop() }
-        )
     }
 }

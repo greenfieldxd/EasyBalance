@@ -20,7 +20,6 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,9 +30,11 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,6 +47,7 @@ import com.greenfieldxd.easybalance.presentation.AppColors
 @Composable
 actual fun TransactionsListSection(
     transactions: List<TransactionModel>,
+    categoriesColorMap: Map<String, Color>,
     scrollState: LazyListState,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
@@ -86,7 +88,8 @@ actual fun TransactionsListSection(
                     items = transactions,
                     key = { it.id }
                 ) { transaction ->
-                    TransactionItem(modifier = Modifier.animateItem(), transaction = transaction, onEdit = onEdit, onDelete = onDelete)
+                    val categoryColor = categoriesColorMap[transaction.category] ?: AppColors.Primary
+                    TransactionItem(modifier = Modifier.animateItem(), transaction = transaction, categoryColor = categoryColor, onEdit = onEdit, onDelete = onDelete)
                 }
             }
         }
@@ -94,8 +97,9 @@ actual fun TransactionsListSection(
 }
 
 @Composable
-actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, onEdit: ((Long) -> Unit)?, onDelete: ((Long) -> Unit)?) {
-    var extended by remember { mutableStateOf(false) }
+actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, categoryColor: Color, onEdit: ((Long) -> Unit)?, onDelete: ((Long) -> Unit)?) {
+    var extended by rememberSaveable { mutableStateOf(false) }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -142,7 +146,7 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, on
             text = transaction.category,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
-            color = AppColors.Primary
+            color = categoryColor
         )
         Row (modifier = Modifier.fillMaxWidth()) {
             Text(

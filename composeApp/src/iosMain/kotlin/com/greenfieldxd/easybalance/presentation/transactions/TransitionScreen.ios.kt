@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,6 +29,7 @@ import com.greenfieldxd.easybalance.presentation.CustomSwipeBox
 @Composable
 actual fun TransactionsListSection(
     transactions: List<TransactionModel>,
+    categoriesColorMap: Map<String, Color>,
     scrollState: LazyListState,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
@@ -51,8 +53,9 @@ actual fun TransactionsListSection(
                 items = transactions,
                 key = { it.id }
             ) { transaction ->
+                val categoryColor = categoriesColorMap[transaction.category] ?: AppColors.Primary
                 CustomSwipeBox(modifier = Modifier.animateItem(), onEdit = { onEdit.invoke(transaction.id) }, onDelete = { onDelete.invoke(transaction.id) }) {
-                    TransactionItem(transaction = transaction)
+                    TransactionItem(transaction = transaction, categoryColor = categoryColor)
                 }
             }
         }
@@ -60,7 +63,7 @@ actual fun TransactionsListSection(
 }
 
 @Composable
-actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, onEdit: ((Long) -> Unit)?, onDelete: ((Long) -> Unit)?) {
+actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, categoryColor: Color, onEdit: ((Long) -> Unit)?, onDelete: ((Long) -> Unit)?) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -78,7 +81,7 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, on
             text = transaction.category,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
-            color = AppColors.Primary
+            color = categoryColor
         )
         Row (modifier = Modifier.fillMaxWidth()) {
             Text(

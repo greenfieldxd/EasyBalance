@@ -3,6 +3,7 @@ package com.greenfieldxd.easybalance.presentation.transactions
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.greenfieldxd.easybalance.data.TransactionType
+import com.greenfieldxd.easybalance.data.database.CategoryDao
 import com.greenfieldxd.easybalance.data.database.TransactionDao
 import com.greenfieldxd.easybalance.domain.TransactionClassifierUseCase
 import kotlinx.coroutines.flow.map
@@ -11,14 +12,24 @@ import kotlinx.datetime.LocalDateTime
 
 class TransactionScreenModel(
     private val transactionClassifierUseCase: TransactionClassifierUseCase,
-    private val transactionDao: TransactionDao
+    private val transactionDao: TransactionDao,
+    private val categoryDao: CategoryDao
 ) : ScreenModel {
 
-    val transactions = transactionDao.getAll().map { transactions -> transactions.sortedByDescending { LocalDateTime.parse(it.date) } }
+    val transactions = transactionDao.getAll().map {
+        transactions -> transactions.sortedByDescending {
+            LocalDateTime.parse(it.date)
+        }
+    }
+
     val balance = transactionDao.getAll().map { transactionModels ->
         transactionModels.sumOf {
             if (it.transactionType == TransactionType.INCOME) it.amount else -it.amount
         }
+    }
+
+    val categoriesColorMap = categoryDao.getAll().map { categories ->
+        categories.associate { it.name to it.color }
     }
 
     fun classifier(input: String, transactionType: TransactionType) {

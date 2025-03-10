@@ -25,16 +25,6 @@ fun AnalyticsScreen(screenModel: AnalyticsScreenModel) {
 
 @Composable
 fun AddCustomPieChart() {
-    val pieColors = listOf(
-        AppColors.Primary,
-        AppColors.PrimaryVariant,
-        AppColors.Purple,
-        AppColors.LightPurple,
-        AppColors.DarkPurple,
-        AppColors.Orange,
-        AppColors.Brown,
-        AppColors.Yellow
-    )
 
     val style = PieChartDefaults.style(
         borderColor = Color.White,

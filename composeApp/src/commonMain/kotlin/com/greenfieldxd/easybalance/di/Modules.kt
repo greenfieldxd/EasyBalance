@@ -24,9 +24,9 @@ val sharedModule = module {
     singleOf(::TransactionClassifierUseCaseImpl).bind<TransactionClassifierUseCase>()
 
     //Screen
-    factory { TransactionScreenModel(get(), get()) }
+    factory { TransactionScreenModel(get(), get(), get()) }
     factory { EditTransitionScreenModel(get(), get()) }
-    factory { CategoryScreenModel(get()) }
+    factory { CategoryScreenModel(get(), get()) }
     factory { AnalyticsScreenModel(get()) }
     factory { SettingsScreenModel() }
 }
