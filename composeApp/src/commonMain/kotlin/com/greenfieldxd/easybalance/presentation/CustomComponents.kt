@@ -175,7 +175,7 @@ fun CustomSwipeBox(
 
     val (icon, alignment, color) = when (dismissDirection) {
         SwipeToDismissBoxValue.EndToStart -> Triple(Icons.Filled.Delete, Alignment.CenterEnd, AppColors.Red)
-        SwipeToDismissBoxValue.StartToEnd -> Triple(Icons.Filled.Edit, Alignment.CenterStart, AppColors.Green)
+        SwipeToDismissBoxValue.StartToEnd -> Triple(Icons.Filled.Edit, Alignment.CenterStart, AppColors.Primary)
         else -> Triple(Icons.Filled.Delete, Alignment.CenterEnd, Color.LightGray)
     }
 
@@ -237,6 +237,7 @@ fun CustomSwipeBox(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
+                tint = AppColors.Background,
                 modifier = Modifier
                     .align(alignment)
                     .padding(16.dp)

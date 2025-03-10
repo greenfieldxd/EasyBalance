@@ -38,7 +38,7 @@ actual fun TransactionsListSection(
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Транзакции",
-            fontSize = 20.sp,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             color = AppColors.OnBackground
         )
@@ -78,23 +78,21 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, ca
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
+
             text = transaction.category,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
+            style = MaterialTheme.typography.labelLarge,
             color = categoryColor
         )
-        Row (modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth().padding(end = 20.dp)) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = transaction.description,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.labelMedium,
                 color = AppColors.OnSurface
             )
             Text(
                 text = formatDate(transaction.date),
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Normal,
+                style = MaterialTheme.typography.labelMedium,
                 color = AppColors.OnSurface
             )
         }

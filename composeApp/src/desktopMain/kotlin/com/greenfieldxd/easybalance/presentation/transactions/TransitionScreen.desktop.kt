@@ -59,7 +59,7 @@ actual fun TransactionsListSection(
         }
     }
 
-    Box (modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
         VerticalScrollbar(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
@@ -74,7 +74,7 @@ actual fun TransactionsListSection(
         ) {
             Text(
                 text = "Транзакции",
-                fontSize = 20.sp,
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = AppColors.OnBackground
             )
@@ -88,8 +88,15 @@ actual fun TransactionsListSection(
                     items = transactions,
                     key = { it.id }
                 ) { transaction ->
-                    val categoryColor = categoriesColorMap[transaction.category] ?: AppColors.Primary
-                    TransactionItem(modifier = Modifier.animateItem(), transaction = transaction, categoryColor = categoryColor, onEdit = onEdit, onDelete = onDelete)
+                    val categoryColor =
+                        categoriesColorMap[transaction.category] ?: AppColors.Primary
+                    TransactionItem(
+                        modifier = Modifier.animateItem(),
+                        transaction = transaction,
+                        categoryColor = categoryColor,
+                        onEdit = onEdit,
+                        onDelete = onDelete
+                    )
                 }
             }
         }
@@ -97,7 +104,13 @@ actual fun TransactionsListSection(
 }
 
 @Composable
-actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, categoryColor: Color, onEdit: ((Long) -> Unit)?, onDelete: ((Long) -> Unit)?) {
+actual fun TransactionItem(
+    modifier: Modifier,
+    transaction: TransactionModel,
+    categoryColor: Color,
+    onEdit: ((Long) -> Unit)?,
+    onDelete: ((Long) -> Unit)?
+) {
     var extended by rememberSaveable { mutableStateOf(false) }
 
     Column(
@@ -106,9 +119,9 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, ca
             .background(AppColors.Surface, shape = MaterialTheme.shapes.medium)
             .padding(16.dp)
     ) {
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically,
-        ){
+        ) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = formatToCurrency(transaction.amount),
@@ -121,7 +134,7 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, ca
                     IconButton(onClick = { onEdit?.invoke(transaction.id) }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
-                            tint = AppColors.Green,
+                            tint = AppColors.Primary,
                             contentDescription = null
                         )
                     }
@@ -143,23 +156,21 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, ca
         }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
+
             text = transaction.category,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
+            style = MaterialTheme.typography.labelLarge,
             color = categoryColor
         )
-        Row (modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth().padding(end = 20.dp)) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = transaction.description,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.labelMedium,
                 color = AppColors.OnSurface
             )
             Text(
                 text = formatDate(transaction.date),
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Normal,
+                style = MaterialTheme.typography.labelMedium,
                 color = AppColors.OnSurface
             )
         }

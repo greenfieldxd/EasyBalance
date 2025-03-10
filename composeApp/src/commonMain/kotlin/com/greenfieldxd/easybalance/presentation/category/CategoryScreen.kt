@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
@@ -82,12 +83,12 @@ fun CategoryItem(
                 modifier = Modifier.weight(1f),
                 text = category.name,
                 color = category.color,
-                fontSize = 18.sp,
+                style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold
             )
 
             CustomButton(
-                modifier = Modifier,
+                modifier = Modifier.width(128.dp),
                 backgroundColor = AppColors.Surface,
                 contentColor = AppColors.OnSurface,
                 text = if (extended) "Скрыть" else "Изменить",
@@ -99,7 +100,7 @@ fun CategoryItem(
         Text(
             text = category.keywords.joinToString(", "),
             color = AppColors.OnSurface,
-            fontSize = 12.sp,
+            style = MaterialTheme.typography.labelMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
