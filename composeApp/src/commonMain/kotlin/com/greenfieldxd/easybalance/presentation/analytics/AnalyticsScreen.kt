@@ -18,7 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
 import com.greenfieldxd.easybalance.domain.PieChartModel
 import com.greenfieldxd.easybalance.presentation.AppColors
@@ -26,11 +28,14 @@ import io.github.dautovicharis.charts.PieChart
 import io.github.dautovicharis.charts.model.toChartDataSet
 import io.github.dautovicharis.charts.style.PieChartDefaults
 
-@Composable
-expect fun AnalyticsScreen(screenModel: AnalyticsScreenModel)
+expect class AnalyticsScreen() : Screen
 
 @Composable
 fun CategoryPieChart(modifier: Modifier = Modifier, expensesByCategory: List<PieChartModel>) {
+
+    val density = LocalDensity.current
+    val borderWidth = with(density) { 3.dp.toPx() }
+
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -48,7 +53,8 @@ fun CategoryPieChart(modifier: Modifier = Modifier, expensesByCategory: List<Pie
             style = PieChartDefaults.style(
                 pieColors = colors,
                 borderColor = AppColors.Surface,
-                borderWidth = 6f
+                borderWidth = borderWidth,
+                donutPercentage = 20f
             )
         )
     }

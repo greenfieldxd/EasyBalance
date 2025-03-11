@@ -15,33 +15,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.core.screen.uniqueScreenKey
+import cafe.adriel.voyager.koin.koinScreenModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 
-@Composable
-actual fun AnalyticsScreen(screenModel: AnalyticsScreenModel) {
-    val expensesByCategory by screenModel.expensesByCategory.collectAsState()
+actual class AnalyticsScreen : Screen {
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            text = "Аналитика",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = AppColors.OnBackground
-        )
-        Row(
-            modifier = Modifier.fillMaxSize(),
+    override val key: ScreenKey = uniqueScreenKey
+
+    @Composable
+    override fun Content() {
+        val screenModel = koinScreenModel<AnalyticsScreenModel>()
+        val expensesByCategory by screenModel.expensesByCategory.collectAsState()
+
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            CategoryPieChart(
-                modifier = Modifier.weight(0.6f),
-                expensesByCategory = expensesByCategory
+            Text(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                text = "Аналитика",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = AppColors.OnBackground
             )
-            ExpenseCategoryList(
-                modifier = Modifier.weight(0.4f).padding(end = 16.dp),
-                expenses = expensesByCategory
-            )
+            Row(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                CategoryPieChart(
+                    modifier = Modifier.weight(0.6f),
+                    expensesByCategory = expensesByCategory
+                )
+                ExpenseCategoryList(
+                    modifier = Modifier.weight(0.4f).padding(end = 16.dp),
+                    expenses = expensesByCategory
+                )
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿package com.greenfieldxd.easybalance.presentation.analytics
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -12,29 +12,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.core.screen.uniqueScreenKey
+import cafe.adriel.voyager.koin.koinScreenModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 
-@Composable
-actual fun AnalyticsScreen(screenModel: AnalyticsScreenModel) {
-    val expensesByCategory by screenModel.expensesByCategory.collectAsState()
+actual class AnalyticsScreen : Screen {
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            "Аналитика",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = AppColors.OnBackground
-        )
-        CategoryPieChart(
-            modifier = Modifier.weight(0.75f),
-            expensesByCategory = expensesByCategory
-        )
-        ExpenseCategoryList(
-            modifier = Modifier.weight(0.25f),
-            expenses = expensesByCategory
-        )
+    override val key: ScreenKey = uniqueScreenKey
+
+    @Composable
+    override fun Content() {
+        val screenModel = koinScreenModel<AnalyticsScreenModel>()
+
+        val expensesByCategory by screenModel.expensesByCategory.collectAsState()
+
+        Column (modifier = Modifier.fillMaxSize()) {
+            Text(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                text = "Аналитика",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = AppColors.OnBackground
+            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+
+                CategoryPieChart(
+                    modifier = Modifier.weight(0.75f),
+                    expensesByCategory = expensesByCategory
+                )
+                ExpenseCategoryList(
+                    modifier = Modifier.weight(0.25f).padding(horizontal = 16.dp).padding(bottom = 16.dp),
+                    expenses = expensesByCategory
+                )
+            }
+        }
     }
 }
