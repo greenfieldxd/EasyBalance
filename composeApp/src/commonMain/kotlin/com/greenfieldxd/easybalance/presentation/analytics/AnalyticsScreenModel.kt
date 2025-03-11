@@ -3,7 +3,7 @@ package com.greenfieldxd.easybalance.presentation.analytics
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.greenfieldxd.easybalance.data.TransactionType
-import com.greenfieldxd.easybalance.domain.AnalyticModel
+import com.greenfieldxd.easybalance.domain.PieChartModel
 import com.greenfieldxd.easybalance.domain.GetAnalyticsUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class AnalyticsScreenModel(
     private val getAnalyticsUseCase: GetAnalyticsUseCase
 ) : ScreenModel {
-    private val _expensesByCategory = MutableStateFlow<List<AnalyticModel>>(emptyList())
+    private val _expensesByCategory = MutableStateFlow<List<PieChartModel>>(emptyList())
     val expensesByCategory = _expensesByCategory.asStateFlow()
 
     private var _transactionType = TransactionType.SPEND

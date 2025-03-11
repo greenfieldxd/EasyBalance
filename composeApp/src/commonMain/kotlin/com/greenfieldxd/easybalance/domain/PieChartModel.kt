@@ -1,7 +1,6 @@
 ﻿package com.greenfieldxd.easybalance.domain
 
-data class AnalyticModel(
+data class PieChartModel(
     val category: CategoryModel,
-    val total: Double,
-    val percentage: Float
+    val value: Double,
 )

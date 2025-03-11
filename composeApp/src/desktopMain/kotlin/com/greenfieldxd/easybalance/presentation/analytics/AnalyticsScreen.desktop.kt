@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,25 +22,24 @@ actual fun AnalyticsScreen(screenModel: AnalyticsScreenModel) {
     val expensesByCategory by screenModel.expensesByCategory.collectAsState()
 
     Column(
-        Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            "Аналитика",
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            text = "Аналитика",
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             color = AppColors.OnBackground
         )
         Row(
-            modifier = Modifier.fillMaxSize().background(color = AppColors.Surface, shape = MaterialTheme.shapes.medium),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxSize(),
         ) {
             CategoryPieChart(
                 modifier = Modifier.weight(0.6f),
                 expensesByCategory = expensesByCategory
             )
             ExpenseCategoryList(
-                modifier = Modifier.weight(0.4f).padding(16.dp),
+                modifier = Modifier.weight(0.4f).padding(end = 16.dp),
                 expenses = expensesByCategory
             )
         }

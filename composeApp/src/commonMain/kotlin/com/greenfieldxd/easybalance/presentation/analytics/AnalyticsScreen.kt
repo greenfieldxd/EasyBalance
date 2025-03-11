@@ -3,6 +3,7 @@ package com.greenfieldxd.easybalance.presentation.analytics
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
-import com.greenfieldxd.easybalance.domain.AnalyticModel
+import com.greenfieldxd.easybalance.domain.PieChartModel
 import com.greenfieldxd.easybalance.presentation.AppColors
 import io.github.dautovicharis.charts.PieChart
 import io.github.dautovicharis.charts.model.toChartDataSet
@@ -29,34 +30,39 @@ import io.github.dautovicharis.charts.style.PieChartDefaults
 expect fun AnalyticsScreen(screenModel: AnalyticsScreenModel)
 
 @Composable
-fun CategoryPieChart(modifier: Modifier = Modifier, expensesByCategory: List<AnalyticModel>) {
-    val style = PieChartDefaults.style(
-        pieColor = AppColors.Primary,
-        borderColor = AppColors.Surface,
-        donutPercentage = 20f,
-        borderWidth = 6f,
-        legendVisible = true,
-        pieColors = expensesByCategory.map { it.category.color },
-    )
-
-    val items = expensesByCategory.map { it.percentage }
-    val dataSet = items
-        .toChartDataSet(
-            title = "Категории расходов",
-            postfix = " %"
-        )
-
-    Box (
-        modifier = modifier.fillMaxSize()
+fun CategoryPieChart(modifier: Modifier = Modifier, expensesByCategory: List<PieChartModel>) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        PieChart(dataSet = dataSet, style = style)
+        val colors = expensesByCategory.map { it.category.color }
+        val labels = expensesByCategory.map { it.category.name }
+        val dataSet = expensesByCategory.map { it.value }
+            .toChartDataSet(
+                title = "Категории",
+                labels = labels
+            )
+
+        PieChart(
+            dataSet = dataSet,
+            style = PieChartDefaults.style(
+                pieColors = colors,
+                borderColor = AppColors.Surface,
+                borderWidth = 6f
+            )
+        )
     }
 }
 
 @Composable
-fun ExpenseCategoryList(modifier: Modifier = Modifier, expenses: List<AnalyticModel>) {
+fun ExpenseCategoryList(modifier: Modifier = Modifier, expenses: List<PieChartModel>) {
+
+    Column (
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center
+    ) {
         LazyColumn(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(expenses) { expense ->
@@ -75,8 +81,9 @@ fun ExpenseCategoryList(modifier: Modifier = Modifier, expenses: List<AnalyticMo
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(text = expense.category.name, style = MaterialTheme.typography.labelMedium)
                     }
-                    Text(text = formatToCurrency(expense.total), style = MaterialTheme.typography.labelSmall)
+                    Text(text = formatToCurrency(expense.value), style = MaterialTheme.typography.labelSmall)
                 }
             }
         }
+    }
 }
