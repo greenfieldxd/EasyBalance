@@ -44,7 +44,7 @@ fun CategoryPieChart(modifier: Modifier = Modifier, expensesByCategory: List<Pie
         val labels = expensesByCategory.map { it.category.name }
         val dataSet = expensesByCategory.map { it.value }
             .toChartDataSet(
-                title = "Категории",
+                title = "Расходы",
                 labels = labels
             )
 

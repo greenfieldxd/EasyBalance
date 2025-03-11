@@ -1,5 +1,6 @@
 ﻿package com.greenfieldxd.easybalance.presentation.analytics
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,18 +38,35 @@ actual class AnalyticsScreen : Screen {
                 fontWeight = FontWeight.Bold,
                 color = AppColors.OnBackground
             )
-            Column(
-                modifier = Modifier.fillMaxSize(),
-            ) {
 
-                CategoryPieChart(
-                    modifier = Modifier.weight(0.75f),
-                    expensesByCategory = expensesByCategory
-                )
-                ExpenseCategoryList(
-                    modifier = Modifier.weight(0.25f).padding(horizontal = 16.dp).padding(bottom = 16.dp),
-                    expenses = expensesByCategory
-                )
+            if (expensesByCategory.size > 2) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+
+                    CategoryPieChart(
+                        modifier = Modifier.weight(0.75f),
+                        expensesByCategory = expensesByCategory
+                    )
+                    ExpenseCategoryList(
+                        modifier = Modifier.weight(0.25f).padding(horizontal = 16.dp).padding(bottom = 16.dp),
+                        expenses = expensesByCategory
+                    )
+                }
+            }
+            else {
+                Column (
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        modifier = Modifier,
+                        text = "Не хватает данных",
+                        color = AppColors.Red,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
             }
         }
     }

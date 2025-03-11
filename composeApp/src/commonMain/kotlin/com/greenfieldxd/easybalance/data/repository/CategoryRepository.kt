@@ -56,7 +56,7 @@ class CategoryRepositoryImpl(
 
                 else -> null
             }
-        } ?: (-1L to "Неопределено")
+        } ?: (CategoryDefaultDataSource.categories.lastIndex.toLong() to "Неопределено")
     }
 
     private fun fuzzyMatchWord(word: String, text: String, threshold: Double = 0.3): Boolean {
