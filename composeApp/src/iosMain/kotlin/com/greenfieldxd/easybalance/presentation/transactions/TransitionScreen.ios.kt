@@ -29,7 +29,7 @@ import com.greenfieldxd.easybalance.presentation.CustomSwipeBox
 @Composable
 actual fun TransactionsListSection(
     transactions: List<TransactionModel>,
-    categoriesColorMap: Map<String, Color>,
+    categoriesData: Map<Long, Pair<String, Color>>,
     scrollState: LazyListState,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
@@ -53,9 +53,8 @@ actual fun TransactionsListSection(
                 items = transactions,
                 key = { it.id }
             ) { transaction ->
-                val categoryColor = categoriesColorMap[transaction.category] ?: AppColors.Primary
                 CustomSwipeBox(modifier = Modifier.animateItem(), onEdit = { onEdit.invoke(transaction.id) }, onDelete = { onDelete.invoke(transaction.id) }) {
-                    TransactionItem(transaction = transaction, categoryColor = categoryColor)
+                    TransactionItem(transaction = transaction, categoriesData = categoriesData)
                 }
             }
         }
@@ -63,7 +62,13 @@ actual fun TransactionsListSection(
 }
 
 @Composable
-actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, categoryColor: Color, onEdit: ((Long) -> Unit)?, onDelete: ((Long) -> Unit)?) {
+actual fun TransactionItem(
+    modifier: Modifier,
+    transaction: TransactionModel,
+    categoriesData: Map<Long, Pair<String, Color>>,
+    onEdit: ((Long) -> Unit)?,
+    onDelete: ((Long) -> Unit)?
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -78,10 +83,9 @@ actual fun TransactionItem(modifier: Modifier, transaction: TransactionModel, ca
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-
-            text = transaction.category,
+            text = categoriesData[transaction.categoryId]?.first ?: "Разное",
             style = MaterialTheme.typography.labelLarge,
-            color = categoryColor
+            color = categoriesData[transaction.categoryId]?.second ?: AppColors.Primary
         )
         Row(modifier = Modifier.fillMaxWidth().padding(end = 20.dp)) {
             Text(

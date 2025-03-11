@@ -39,4 +39,13 @@ object CategoryColors {
     val CoralRed = Color(0xFFD84315)
     val VibrantRose = Color(0xFFFF4081)
     val NeonPink = Color(0xFFFF1493)
+
+    val list: List<Color> = listOf(
+        FireRed, SunsetOrange, BrightPeach,
+        RoyalBlue, ElectricBlue, DeepNavy,
+        RichGold, WarmAmber, GoldenSand,
+        TealGreen, AquaBlue, ForestGreen, OliveDrab,
+        RoyalPurple, DeepLavender,
+        CoralRed, VibrantRose, NeonPink
+    )
 }

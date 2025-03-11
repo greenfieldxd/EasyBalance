@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -47,7 +46,7 @@ class TransitionScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         val transactions by screenModel.transactions.collectAsState(emptyList())
-        val categoriesColorMap by screenModel.categoriesColorMap.collectAsState(emptyMap())
+        val categoriesData by screenModel.categoriesData.collectAsState(emptyMap())
         val totalBalance by screenModel.balance.collectAsState(0.0)
 
         val scrollState = rememberLazyListState()
@@ -69,7 +68,6 @@ class TransitionScreen : Screen {
                 .background(AppColors.Background)
                 .padding(16.dp)
         ) {
-            HeaderSection()
             Spacer(modifier = Modifier.height(16.dp))
             BalanceSection(
                 balance = formatToCurrency(amount = totalBalance),
@@ -86,26 +84,10 @@ class TransitionScreen : Screen {
             TransactionsListSection(
                 scrollState = scrollState,
                 transactions = transactions,
-                categoriesColorMap = categoriesColorMap,
+                categoriesData = categoriesData,
                 onEdit = { navigator.push(EditTransitionScreen(it)) },
                 onDelete = { screenModel.deleteTransaction(it) })
         }
-    }
-}
-
-@Composable
-fun HeaderSection() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            modifier = Modifier.weight(1f),
-            text = "Easy Balance",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = AppColors.OnBackground
-        )
     }
 }
 
@@ -148,7 +130,7 @@ fun BalanceSection(
 @Composable
 expect fun TransactionsListSection(
     transactions: List<TransactionModel>,
-    categoriesColorMap: Map<String, Color>,
+    categoriesData: Map<Long, Pair<String, Color>>,
     scrollState: LazyListState,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
@@ -158,7 +140,7 @@ expect fun TransactionsListSection(
 expect fun TransactionItem(
     modifier: Modifier = Modifier,
     transaction: TransactionModel,
-    categoryColor: Color,
+    categoriesData: Map<Long, Pair<String, Color>>,
     onEdit: ((Long) -> Unit)? = null,
     onDelete: ((Long) -> Unit)? = null
 )

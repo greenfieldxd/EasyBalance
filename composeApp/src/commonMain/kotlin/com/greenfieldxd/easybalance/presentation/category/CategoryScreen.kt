@@ -4,14 +4,21 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +29,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,6 +47,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.greenfieldxd.easybalance.data.repository.CategoryData
 import com.greenfieldxd.easybalance.domain.CategoryModel
 import com.greenfieldxd.easybalance.presentation.AppColors
+import com.greenfieldxd.easybalance.presentation.CategoryColors
 import com.greenfieldxd.easybalance.presentation.CustomButton
 import com.greenfieldxd.easybalance.presentation.CustomTextField
 
@@ -58,6 +69,7 @@ fun CategoryItem(
     onSave: (id: Long, data: CategoryData) -> Unit
 ) {
     var extended by rememberSaveable { mutableStateOf(false) }
+    var colorInput by rememberSaveable { mutableStateOf(category.color.toArgb()) }
     var categoryInput by rememberSaveable { mutableStateOf(category.name) }
     var keywordsInput by rememberSaveable { mutableStateOf(category.keywords.joinToString(", ")) }
 
@@ -107,6 +119,7 @@ fun CategoryItem(
 
         if (extended) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                ColorPicker(initColor = category.color, CategoryColors.list, onSelected = { colorInput = it })
                 CustomTextField(
                     placeholder = "Категория",
                     value = categoryInput,
@@ -134,7 +147,7 @@ fun CategoryItem(
                                     .split(", ")
                                     .map { it.trim() }
                                     .filter { it.isNotEmpty() },
-                                color = category.color.toArgb()
+                                color = colorInput
                             )
                             onSave.invoke(category.id, data)
                         }
@@ -151,3 +164,6 @@ fun CategoryItem(
         }
     }
 }
+
+@Composable
+expect fun ColorPicker(initColor: Color, colors: List<Color>, onSelected: (Int) -> Unit)

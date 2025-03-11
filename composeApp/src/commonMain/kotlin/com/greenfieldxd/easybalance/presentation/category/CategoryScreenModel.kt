@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.greenfieldxd.easybalance.data.database.CategoryDao
 import com.greenfieldxd.easybalance.data.repository.CategoryData
 import com.greenfieldxd.easybalance.data.repository.CategoryRepository
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class CategoryScreenModel(
@@ -12,6 +13,7 @@ class CategoryScreenModel(
     private val categoryRepository: CategoryRepository
 ) : ScreenModel {
     val categories = categoryDao.getAll()
+    val categoryColors = categoryDao.getAll().map { categoryModels -> categoryModels.map { it.color } }
 
     fun create(categoryData: CategoryData) {
         screenModelScope.launch {

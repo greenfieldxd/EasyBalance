@@ -47,7 +47,7 @@ import com.greenfieldxd.easybalance.presentation.AppColors
 @Composable
 actual fun TransactionsListSection(
     transactions: List<TransactionModel>,
-    categoriesColorMap: Map<String, Color>,
+    categoriesData: Map<Long, Pair<String, Color>>,
     scrollState: LazyListState,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
@@ -88,12 +88,10 @@ actual fun TransactionsListSection(
                     items = transactions,
                     key = { it.id }
                 ) { transaction ->
-                    val categoryColor =
-                        categoriesColorMap[transaction.category] ?: AppColors.Primary
                     TransactionItem(
                         modifier = Modifier.animateItem(),
                         transaction = transaction,
-                        categoryColor = categoryColor,
+                        categoriesData = categoriesData,
                         onEdit = onEdit,
                         onDelete = onDelete
                     )
@@ -107,7 +105,7 @@ actual fun TransactionsListSection(
 actual fun TransactionItem(
     modifier: Modifier,
     transaction: TransactionModel,
-    categoryColor: Color,
+    categoriesData: Map<Long, Pair<String, Color>>,
     onEdit: ((Long) -> Unit)?,
     onDelete: ((Long) -> Unit)?
 ) {
@@ -156,10 +154,9 @@ actual fun TransactionItem(
         }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-
-            text = transaction.category,
+            text = categoriesData[transaction.categoryId]?.first ?: "Разное",
             style = MaterialTheme.typography.labelLarge,
-            color = categoryColor
+            color = categoriesData[transaction.categoryId]?.second ?: AppColors.Primary
         )
         Row(modifier = Modifier.fillMaxWidth().padding(end = 20.dp)) {
             Text(

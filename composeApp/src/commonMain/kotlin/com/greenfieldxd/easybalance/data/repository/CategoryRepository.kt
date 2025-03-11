@@ -6,7 +6,7 @@ import kotlinx.coroutines.runBlocking
 
 interface CategoryRepository {
     fun trySetDefaultCategories()
-    suspend fun getCategory(description: String): Pair<String, String>
+    suspend fun getCategory(description: String): Pair<Long, String>
 }
 
 class CategoryRepositoryImpl(
@@ -23,33 +23,40 @@ class CategoryRepositoryImpl(
     override fun trySetDefaultCategories() {
         val count = runBlocking { categoriesCount.first() }
         if (count == 0L) {
-            for (category in CategoryDefaultDataSource.categories) {
-                categoryDao.insert(category)
+            for ((index, category) in CategoryDefaultDataSource.categories.withIndex()) {
+                categoryDao.insertWithId(index.toLong(), category)
             }
         }
     }
 
-    override suspend fun getCategory(description: String): Pair<String, String> {
+    override suspend fun getCategory(description: String): Pair<Long, String> {
         val categories = categoriesFlow.first()
-        if (categories.isEmpty()) {
-            for (category in CategoryDefaultDataSource.categories) {
-                categoryDao.insert(category)
-            }
-        }
-
         val normalizedDesc = description.lowercase()
 
-        for (category in categories) {
-            if (fuzzyMatchWord(category.name.lowercase(), normalizedDesc)) {
-                return category.name to "Не определено"
-            }
-            for (keyword in category.keywords) {
-                if (fuzzyMatchWord(keyword.lowercase(), normalizedDesc)) {
-                    return category.name to keyword
+        return categories.firstNotNullOfOrNull { category ->
+            when {
+                fuzzyMatchWord(
+                    category.name.lowercase(),
+                    normalizedDesc
+                ) -> category.id to "Не определено"
+
+                category.keywords.any { keyword ->
+                    fuzzyMatchWord(
+                        keyword.lowercase(),
+                        normalizedDesc
+                    )
+                } -> {
+                    category.id to category.keywords.first { keyword ->
+                        fuzzyMatchWord(
+                            keyword.lowercase(),
+                            normalizedDesc
+                        )
+                    }
                 }
+
+                else -> null
             }
-        }
-        return "Разное" to "Не определено"
+        } ?: (-1L to "Не определено")
     }
 
     private fun fuzzyMatchWord(word: String, text: String, threshold: Double = 0.3): Boolean {

@@ -28,9 +28,10 @@ class TransactionScreenModel(
         }
     }
 
-    val categoriesColorMap = categoryDao.getAll().map { categories ->
-        categories.associate { it.name to it.color }
+    val categoriesData = categoryDao.getAll().map { categories ->
+        categories.associate { category -> category.id to Pair(category.name, category.color) }
     }
+
 
     fun classifier(input: String, transactionType: TransactionType) {
         screenModelScope.launch {

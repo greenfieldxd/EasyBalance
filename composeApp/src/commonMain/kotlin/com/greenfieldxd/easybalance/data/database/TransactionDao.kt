@@ -16,8 +16,8 @@ class TransactionDao(
 ) {
     private val queries  = db.databaseQueries
 
-    suspend fun insert(amount: Double, category: String, description: String, date: String, transactionType: Int) = withContext(ioDispatcher) {
-        queries.insertTransaction(amount = amount, category = category, description = description, date = date, transactionType = transactionType.toLong())
+    suspend fun insert(amount: Double, categoryId: Long, description: String, date: String, transactionType: Int) = withContext(ioDispatcher) {
+        queries.insertTransaction(amount = amount, categoryId = categoryId, description = description, date = date, transactionType = transactionType.toLong())
     }
 
     suspend fun get(id: Long): TransactionModel? = withContext(ioDispatcher) {
@@ -27,18 +27,18 @@ class TransactionDao(
         return@withContext TransactionModel(
                 id = transactionEntity.id,
                 amount = transactionEntity.amount,
-                category = transactionEntity.category,
+                categoryId = transactionEntity.categoryId,
                 description = transactionEntity.description,
                 date = transactionEntity.date,
                 transactionType = if (transactionEntity.transactionType == TransactionType.INCOME.ordinal.toLong()) TransactionType.INCOME else TransactionType.SPEND
         )
     }
 
-    fun getAll() = queries.getAllTransactions(mapper = { id, amount, category, description, date, transactionType ->
+    fun getAll() = queries.getAllTransactions(mapper = { id, amount, categoryId, description, date, transactionType ->
         TransactionModel(
             id = id,
             amount = amount,
-            category = category,
+            categoryId = categoryId,
             description= description,
             date = date,
             transactionType = if (transactionType == TransactionType.INCOME.ordinal.toLong()) TransactionType.INCOME else TransactionType.SPEND
@@ -49,7 +49,7 @@ class TransactionDao(
         queries.updateTransaction(
             id = id,
             amount = transaction.amount,
-            category = transaction.category,
+            categoryId = transaction.categoryId,
             description = transaction.description,
             transactionType = transaction.transactionType.ordinal.toLong())
     }

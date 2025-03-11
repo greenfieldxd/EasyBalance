@@ -30,16 +30,16 @@ import kotlinx.coroutines.launch
 
 @Composable
 actual fun CategoryPicker(
-    initCategory: String,
+    initCategoryId: Long,
     categories: List<CategoryModel>,
     onSelected: (CategoryModel) -> Unit
 ) {
     val state = rememberLazyListState()
-    var selectedCategory by remember { mutableStateOf(initCategory) }
+    var selectedCategory by remember { mutableStateOf(initCategoryId) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        val index = categories.indexOfFirst { it.name == selectedCategory }
+        val index = categories.indexOfFirst { it.id == selectedCategory }
         if (index >= 0) state.scrollToItem(index)
     }
 
@@ -65,13 +65,13 @@ actual fun CategoryPicker(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(categories) { category ->
-                val selected = selectedCategory == category.name
+                val selected = selectedCategory == category.id
                 CustomButton(
                     modifier = Modifier,
                     text = category.name,
                     backgroundColor = if (selected) category.color else AppColors.LightGray,
                     onClick = {
-                        selectedCategory = category.name
+                        selectedCategory = category.id
                         onSelected.invoke(category)
                     }
                 )
