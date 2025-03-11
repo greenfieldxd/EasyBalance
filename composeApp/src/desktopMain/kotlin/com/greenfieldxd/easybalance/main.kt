@@ -11,12 +11,13 @@ fun main() {
     initKoin()
     application {
         val windowState = rememberWindowState(
-            width = 600.dp,
+            width = 800.dp,
             height = 800.dp
         )
         Window(
             state = windowState,
             onCloseRequest = ::exitApplication,
+            resizable = false,
             title = "EasyBalance",
         ) {
             App()

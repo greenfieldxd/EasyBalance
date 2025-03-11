@@ -2,6 +2,8 @@ package com.greenfieldxd.easybalance.di
 
 import com.greenfieldxd.easybalance.data.repository.CategoryRepository
 import com.greenfieldxd.easybalance.data.repository.CategoryRepositoryImpl
+import com.greenfieldxd.easybalance.domain.GetAnalyticsUseCase
+import com.greenfieldxd.easybalance.domain.GetAnalyticsUseCaseImpl
 import com.greenfieldxd.easybalance.domain.TransactionClassifierUseCase
 import com.greenfieldxd.easybalance.domain.TransactionClassifierUseCaseImpl
 import com.greenfieldxd.easybalance.presentation.analytics.AnalyticsScreenModel
@@ -22,6 +24,7 @@ val sharedModule = module {
 
     //UseCase
     singleOf(::TransactionClassifierUseCaseImpl).bind<TransactionClassifierUseCase>()
+    singleOf(::GetAnalyticsUseCaseImpl).bind<GetAnalyticsUseCase>()
 
     //Screen
     factory { TransactionScreenModel(get(), get(), get()) }

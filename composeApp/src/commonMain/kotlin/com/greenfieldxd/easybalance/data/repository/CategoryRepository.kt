@@ -38,7 +38,7 @@ class CategoryRepositoryImpl(
                 fuzzyMatchWord(
                     category.name.lowercase(),
                     normalizedDesc
-                ) -> category.id to "Не определено"
+                ) -> category.id to "Неопределено"
 
                 category.keywords.any { keyword ->
                     fuzzyMatchWord(
@@ -56,7 +56,7 @@ class CategoryRepositoryImpl(
 
                 else -> null
             }
-        } ?: (-1L to "Не определено")
+        } ?: (-1L to "Неопределено")
     }
 
     private fun fuzzyMatchWord(word: String, text: String, threshold: Double = 0.3): Boolean {
