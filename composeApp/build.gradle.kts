@@ -25,7 +25,7 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = true
+            isStatic = false // todo sqldelight https://github.com/sqldelight/sqldelight/issues/5007
         }
     }
 
