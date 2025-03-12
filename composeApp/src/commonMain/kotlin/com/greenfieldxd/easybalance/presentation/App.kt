@@ -25,6 +25,7 @@ import com.greenfieldxd.easybalance.presentation.navigation.AnalyticsTab
 import com.greenfieldxd.easybalance.presentation.navigation.CategoryTab
 import com.greenfieldxd.easybalance.presentation.navigation.SettingsTab
 import com.greenfieldxd.easybalance.presentation.navigation.TransactionTab
+import com.greenfieldxd.easybalance.presentation.other.AppColors
 
 @Composable
 fun App() {

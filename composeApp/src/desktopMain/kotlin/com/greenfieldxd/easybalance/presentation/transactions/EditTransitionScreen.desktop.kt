@@ -23,9 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.greenfieldxd.easybalance.domain.CategoryModel
-import com.greenfieldxd.easybalance.presentation.AppColors
-import com.greenfieldxd.easybalance.presentation.CustomButton
+import com.greenfieldxd.easybalance.domain.model.CategoryModel
+import com.greenfieldxd.easybalance.presentation.other.AppColors
+import com.greenfieldxd.easybalance.presentation.other.CustomButton
 import kotlinx.coroutines.launch
 
 @Composable

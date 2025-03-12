@@ -1,8 +1,6 @@
 ﻿package com.greenfieldxd.easybalance.presentation.analytics
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +19,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
-import com.greenfieldxd.easybalance.presentation.AppColors
+import com.greenfieldxd.easybalance.presentation.other.AppColors
 
 actual class AnalyticsScreen : Screen {
 

@@ -15,9 +15,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
-import com.greenfieldxd.easybalance.presentation.AppColors
-import com.greenfieldxd.easybalance.presentation.CustomButton
-import com.greenfieldxd.easybalance.presentation.analytics.AnalyticsScreenModel
+import com.greenfieldxd.easybalance.presentation.other.AppColors
+import com.greenfieldxd.easybalance.presentation.other.CustomButton
 
 
 class SettingsScreen : Screen {

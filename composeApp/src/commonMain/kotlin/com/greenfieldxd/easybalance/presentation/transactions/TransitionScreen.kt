@@ -1,9 +1,7 @@
 package com.greenfieldxd.easybalance.presentation.transactions
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,11 +30,11 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
-import com.greenfieldxd.easybalance.domain.TransactionModel
-import com.greenfieldxd.easybalance.presentation.AppColors
-import com.greenfieldxd.easybalance.presentation.ChangeTransactionTypeButton
-import com.greenfieldxd.easybalance.presentation.CustomButton
-import com.greenfieldxd.easybalance.presentation.CustomTextField
+import com.greenfieldxd.easybalance.domain.model.TransactionModel
+import com.greenfieldxd.easybalance.presentation.other.AppColors
+import com.greenfieldxd.easybalance.presentation.other.ChangeTransactionTypeButton
+import com.greenfieldxd.easybalance.presentation.other.CustomButton
+import com.greenfieldxd.easybalance.presentation.other.CustomTextField
 
 class TransitionScreen : Screen {
 

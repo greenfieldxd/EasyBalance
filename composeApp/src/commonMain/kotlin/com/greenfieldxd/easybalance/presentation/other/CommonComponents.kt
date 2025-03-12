@@ -1,4 +1,4 @@
-package com.greenfieldxd.easybalance.presentation
+package com.greenfieldxd.easybalance.presentation.other
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween

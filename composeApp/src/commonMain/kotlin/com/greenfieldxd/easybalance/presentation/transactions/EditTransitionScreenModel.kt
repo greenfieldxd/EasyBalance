@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.greenfieldxd.easybalance.data.database.CategoryDao
 import com.greenfieldxd.easybalance.data.database.TransactionDao
-import com.greenfieldxd.easybalance.domain.TransactionModel
+import com.greenfieldxd.easybalance.domain.model.TransactionModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

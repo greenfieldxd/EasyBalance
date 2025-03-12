@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
-import com.greenfieldxd.easybalance.domain.PieChartModel
-import com.greenfieldxd.easybalance.presentation.AppColors
+import com.greenfieldxd.easybalance.domain.model.PieChartModel
+import com.greenfieldxd.easybalance.presentation.other.AppColors
 import io.github.dautovicharis.charts.PieChart
 import io.github.dautovicharis.charts.model.toChartDataSet
 import io.github.dautovicharis.charts.style.PieChartDefaults

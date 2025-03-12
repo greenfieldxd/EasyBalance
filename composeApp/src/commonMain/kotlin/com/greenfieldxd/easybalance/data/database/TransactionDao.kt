@@ -3,7 +3,7 @@ package com.greenfieldxd.easybalance.data.database
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.greenfieldxd.easybalance.data.TransactionType
-import com.greenfieldxd.easybalance.domain.TransactionModel
+import com.greenfieldxd.easybalance.domain.model.TransactionModel
 import databases.Database
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

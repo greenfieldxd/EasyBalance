@@ -27,12 +27,12 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.greenfieldxd.easybalance.domain.CategoryModel
-import com.greenfieldxd.easybalance.domain.TransactionModel
-import com.greenfieldxd.easybalance.presentation.AppColors
-import com.greenfieldxd.easybalance.presentation.ChangeTransactionTypeButton
-import com.greenfieldxd.easybalance.presentation.CustomButton
-import com.greenfieldxd.easybalance.presentation.CustomTextField
+import com.greenfieldxd.easybalance.domain.model.CategoryModel
+import com.greenfieldxd.easybalance.domain.model.TransactionModel
+import com.greenfieldxd.easybalance.presentation.other.AppColors
+import com.greenfieldxd.easybalance.presentation.other.ChangeTransactionTypeButton
+import com.greenfieldxd.easybalance.presentation.other.CustomButton
+import com.greenfieldxd.easybalance.presentation.other.CustomTextField
 
 class EditTransitionScreen(val id: Long) : Screen {
 

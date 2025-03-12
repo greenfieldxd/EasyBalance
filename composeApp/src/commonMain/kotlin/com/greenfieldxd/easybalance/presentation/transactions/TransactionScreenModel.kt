@@ -5,7 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.database.CategoryDao
 import com.greenfieldxd.easybalance.data.database.TransactionDao
-import com.greenfieldxd.easybalance.domain.TransactionClassifierUseCase
+import com.greenfieldxd.easybalance.domain.usecase.TransactionClassifierUseCase
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime

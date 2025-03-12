@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -41,8 +43,8 @@ import androidx.compose.ui.unit.sp
 import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.utils.formatDate
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
-import com.greenfieldxd.easybalance.domain.TransactionModel
-import com.greenfieldxd.easybalance.presentation.AppColors
+import com.greenfieldxd.easybalance.domain.model.TransactionModel
+import com.greenfieldxd.easybalance.presentation.other.AppColors
 
 @Composable
 actual fun TransactionsListSection(
@@ -111,24 +113,66 @@ actual fun TransactionItem(
 ) {
     var extended by rememberSaveable { mutableStateOf(false) }
 
-    Column(
-        modifier = modifier
+    Row(
+        modifier = Modifier
             .fillMaxWidth()
             .background(AppColors.Surface, shape = MaterialTheme.shapes.medium)
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = formatToCurrency(transaction.amount),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.Red
-            )
-            AnimatedVisibility(extended) {
-                Row {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.weight(7f),
+                    text = formatToCurrency(transaction.amount),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.Red
+                )
+                Text(
+                    text = categoriesData[transaction.categoryId]?.first ?: "Разное",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = AppColors.OnSurface
+                )
+                Box(
+                    modifier = Modifier
+                        .size(16.dp)
+                        .background(
+                            color = categoriesData[transaction.categoryId]?.second ?: AppColors.Primary,
+                            shape = CircleShape
+                        )
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = formatDate(transaction.date),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = AppColors.OnSurface
+                )
+                Text(
+                    text = transaction.description,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = AppColors.OnSurface
+                )
+            }
+        }
+
+        Row (modifier = Modifier) {
+            AnimatedVisibility(visible = extended) {
+                Row (
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     IconButton(onClick = { onEdit?.invoke(transaction.id) }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
@@ -151,25 +195,6 @@ actual fun TransactionItem(
                     contentDescription = null
                 )
             }
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = categoriesData[transaction.categoryId]?.first ?: "Разное",
-            style = MaterialTheme.typography.labelLarge,
-            color = categoriesData[transaction.categoryId]?.second ?: AppColors.Primary
-        )
-        Row(modifier = Modifier.fillMaxWidth().padding(end = 20.dp)) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = transaction.description,
-                style = MaterialTheme.typography.labelMedium,
-                color = AppColors.OnSurface
-            )
-            Text(
-                text = formatDate(transaction.date),
-                style = MaterialTheme.typography.labelMedium,
-                color = AppColors.OnSurface
-            )
         }
     }
 }

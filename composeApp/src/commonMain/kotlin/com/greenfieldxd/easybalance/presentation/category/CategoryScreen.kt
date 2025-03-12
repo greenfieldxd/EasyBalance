@@ -32,11 +32,11 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import com.greenfieldxd.easybalance.data.repository.CategoryData
-import com.greenfieldxd.easybalance.domain.CategoryModel
-import com.greenfieldxd.easybalance.presentation.AppColors
-import com.greenfieldxd.easybalance.presentation.CategoryColors
-import com.greenfieldxd.easybalance.presentation.CustomButton
-import com.greenfieldxd.easybalance.presentation.CustomTextField
+import com.greenfieldxd.easybalance.domain.model.CategoryModel
+import com.greenfieldxd.easybalance.presentation.other.AppColors
+import com.greenfieldxd.easybalance.presentation.other.CategoryColors
+import com.greenfieldxd.easybalance.presentation.other.CustomButton
+import com.greenfieldxd.easybalance.presentation.other.CustomTextField
 
 class CategoryScreen : Screen {
 

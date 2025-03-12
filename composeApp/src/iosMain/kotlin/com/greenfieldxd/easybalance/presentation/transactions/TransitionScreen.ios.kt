@@ -2,18 +2,22 @@ package com.greenfieldxd.easybalance.presentation.transactions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -22,9 +26,9 @@ import androidx.compose.ui.unit.sp
 import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.utils.formatDate
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
-import com.greenfieldxd.easybalance.domain.TransactionModel
-import com.greenfieldxd.easybalance.presentation.AppColors
-import com.greenfieldxd.easybalance.presentation.CustomSwipeBox
+import com.greenfieldxd.easybalance.domain.model.TransactionModel
+import com.greenfieldxd.easybalance.presentation.other.AppColors
+import com.greenfieldxd.easybalance.presentation.other.CustomSwipeBox
 
 @Composable
 actual fun TransactionsListSection(
@@ -73,29 +77,44 @@ actual fun TransactionItem(
         modifier = modifier
             .fillMaxWidth()
             .background(AppColors.Surface, shape = MaterialTheme.shapes.medium)
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(
-            text = formatToCurrency(transaction.amount),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.Red
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = categoriesData[transaction.categoryId]?.first ?: "Разное",
-            style = MaterialTheme.typography.labelLarge,
-            color = categoriesData[transaction.categoryId]?.second ?: AppColors.Primary
-        )
-        Row(modifier = Modifier.fillMaxWidth().padding(end = 20.dp)) {
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = transaction.description,
+                text = formatToCurrency(transaction.amount),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.Red
+            )
+            Text(
+                text = categoriesData[transaction.categoryId]?.first ?: "Разное",
+                style = MaterialTheme.typography.labelLarge,
+                color = AppColors.OnSurface
+            )
+            Box(
+                modifier = Modifier
+                    .size(16.dp)
+                    .background(categoriesData[transaction.categoryId]?.second ?: AppColors.Primary, shape = CircleShape)
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = formatDate(transaction.date),
                 style = MaterialTheme.typography.labelMedium,
                 color = AppColors.OnSurface
             )
             Text(
-                text = formatDate(transaction.date),
+                text = transaction.description,
                 style = MaterialTheme.typography.labelMedium,
                 color = AppColors.OnSurface
             )

@@ -18,7 +18,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
-import com.greenfieldxd.easybalance.presentation.AppColors
+import com.greenfieldxd.easybalance.presentation.other.AppColors
 
 actual class AnalyticsScreen : Screen {
 

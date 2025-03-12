@@ -1,4 +1,4 @@
-package com.greenfieldxd.easybalance.presentation
+package com.greenfieldxd.easybalance.presentation.other
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -26,8 +26,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
@@ -174,8 +172,12 @@ fun CustomSwipeBox(
     }
 
     val (icon, alignment, color) = when (dismissDirection) {
-        SwipeToDismissBoxValue.EndToStart -> Triple(Icons.Filled.Delete, Alignment.CenterEnd, AppColors.Red)
-        SwipeToDismissBoxValue.StartToEnd -> Triple(Icons.Filled.Edit, Alignment.CenterStart, AppColors.Primary)
+        SwipeToDismissBoxValue.EndToStart -> Triple(Icons.Filled.Delete, Alignment.CenterEnd,
+            AppColors.Red
+        )
+        SwipeToDismissBoxValue.StartToEnd -> Triple(Icons.Filled.Edit, Alignment.CenterStart,
+            AppColors.Primary
+        )
         else -> Triple(Icons.Filled.Delete, Alignment.CenterEnd, Color.LightGray)
     }
 

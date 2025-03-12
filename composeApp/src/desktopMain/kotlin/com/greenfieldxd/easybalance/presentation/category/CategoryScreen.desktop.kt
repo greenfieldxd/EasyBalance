@@ -47,9 +47,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.greenfieldxd.easybalance.data.repository.CategoryData
-import com.greenfieldxd.easybalance.presentation.AppColors
-import com.greenfieldxd.easybalance.presentation.CategoryColors
-import com.greenfieldxd.easybalance.presentation.CustomButton
+import com.greenfieldxd.easybalance.presentation.other.AppColors
+import com.greenfieldxd.easybalance.presentation.other.CategoryColors
+import com.greenfieldxd.easybalance.presentation.other.CustomButton
 import kotlinx.coroutines.launch
 
 @Composable

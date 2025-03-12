@@ -5,7 +5,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
 import com.greenfieldxd.easybalance.data.repository.CategoryData
-import com.greenfieldxd.easybalance.domain.CategoryModel
+import com.greenfieldxd.easybalance.domain.model.CategoryModel
 import databases.Database
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

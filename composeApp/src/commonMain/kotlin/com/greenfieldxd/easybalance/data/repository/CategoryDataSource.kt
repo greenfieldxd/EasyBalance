@@ -1,7 +1,7 @@
 package com.greenfieldxd.easybalance.data.repository
 
 import androidx.compose.ui.graphics.toArgb
-import com.greenfieldxd.easybalance.presentation.CategoryColors
+import com.greenfieldxd.easybalance.presentation.other.CategoryColors
 
 object CategoryDefaultDataSource {
     val categories = listOf(

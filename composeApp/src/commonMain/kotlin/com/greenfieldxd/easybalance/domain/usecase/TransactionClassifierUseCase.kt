@@ -1,4 +1,4 @@
-package com.greenfieldxd.easybalance.domain
+package com.greenfieldxd.easybalance.domain.usecase
 
 import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.database.TransactionDao

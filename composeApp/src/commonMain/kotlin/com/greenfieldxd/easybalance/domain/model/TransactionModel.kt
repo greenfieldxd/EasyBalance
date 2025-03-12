@@ -1,4 +1,4 @@
-package com.greenfieldxd.easybalance.domain
+package com.greenfieldxd.easybalance.domain.model
 
 import com.greenfieldxd.easybalance.data.TransactionType
 
