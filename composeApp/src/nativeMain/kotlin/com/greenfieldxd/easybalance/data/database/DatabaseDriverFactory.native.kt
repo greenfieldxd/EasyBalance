@@ -1,4 +1,4 @@
-package com.greenfieldxd.easybalance.data.database
+﻿package com.greenfieldxd.easybalance.data.database
 
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.native.NativeSqliteDriver

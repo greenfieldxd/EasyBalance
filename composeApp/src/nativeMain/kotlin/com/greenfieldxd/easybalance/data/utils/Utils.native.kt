@@ -1,9 +1,9 @@
-package com.greenfieldxd.easybalance.data.utils
+﻿package com.greenfieldxd.easybalance.data.utils
 
 import platform.Foundation.NSLocale
+import platform.Foundation.NSNumber
 import platform.Foundation.NSNumberFormatter
 import platform.Foundation.NSNumberFormatterCurrencyStyle
-import platform.Foundation.NSNumber
 import platform.Foundation.numberWithDouble
 
 actual fun formatToCurrency(amount: Double, locale: String): String {

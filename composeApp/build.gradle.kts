@@ -95,12 +95,13 @@ kotlin {
             implementation(libs.logback.classic)
         }
         iosMain.dependencies {
-            //SqlDelight
-            implementation(libs.sqldelight.native.driver)
-
             //Charts
             implementation(libs.charts.iosx64)
             implementation(libs.charts.iosarm64)
+        }
+        nativeMain.dependencies {
+            //SqlDelight
+            implementation(libs.sqldelight.native.driver)
         }
     }
 }

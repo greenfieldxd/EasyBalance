@@ -1,4 +1,4 @@
-package com.greenfieldxd.easybalance.di
+﻿package com.greenfieldxd.easybalance.di
 
 import com.greenfieldxd.easybalance.data.database.DatabaseDriverFactory
 import com.greenfieldxd.easybalance.data.database.TransactionDao
