@@ -58,7 +58,6 @@ actual fun CategorySection(
     scrollState: LazyListState,
 ) {
     val categories by screenModel.categories.collectAsState(emptyList())
-    val categoryColors by screenModel.categoryColors.collectAsState(emptyList())
     var isCategoryCreated by remember { mutableStateOf(false) }
 
     val scrollBarVisible by remember {
@@ -93,20 +92,20 @@ actual fun CategorySection(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Категории",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = AppColors.OnBackground
-                )
                 Row (
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    CustomButton(
+                    Text(
                         modifier = Modifier.weight(1f),
+                        text = "Категории",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = AppColors.OnBackground
+                    )
+                    CustomButton(
+                        modifier = Modifier,
                         text = "Создать категорию",
                         onClick = {
                             val data = CategoryData(
@@ -117,12 +116,6 @@ actual fun CategorySection(
                             screenModel.create(data)
                             isCategoryCreated = true
                         }
-                    )
-                    CustomButton(
-                        modifier = Modifier.weight(1f),
-                        text = "Сбросить категории",
-                        backgroundColor = AppColors.Red,
-                        onClick = { screenModel.returnToDefault() }
                     )
                 }
 

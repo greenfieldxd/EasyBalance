@@ -1,5 +1,6 @@
 package com.greenfieldxd.easybalance.presentation.category
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -58,7 +59,7 @@ expect fun CategorySection(screenModel: CategoryScreenModel, scrollState: LazyLi
 fun CategoryItem(
     modifier: Modifier = Modifier,
     category: CategoryModel,
-    onDelete: (id:Long) -> Unit,
+    onDelete: (id: Long) -> Unit,
     onSave: (id: Long, data: CategoryData) -> Unit
 ) {
     var extended by rememberSaveable { mutableStateOf(false) }
@@ -70,13 +71,7 @@ fun CategoryItem(
         modifier = modifier
             .fillMaxWidth()
             .background(color = AppColors.Surface, shape = MaterialTheme.shapes.medium)
-            .padding(16.dp)
-            .animateContentSize(
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioLowBouncy,
-                    stiffness = Spring.StiffnessMedium
-                )
-            ),
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
@@ -110,48 +105,55 @@ fun CategoryItem(
             overflow = TextOverflow.Ellipsis
         )
 
-        if (extended) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                ColorPicker(initColor = category.color, CategoryColors.list, onSelected = { colorInput = it })
-                CustomTextField(
-                    placeholder = "Категория",
-                    value = categoryInput,
-                    onValueChange = { categoryInput = it }
-                )
-                CustomTextField(
-                    placeholder = "Ключевые слова",
-                    value = keywordsInput,
-                    onValueChange = { keywordsInput = it }
-                )
-                Row (
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ){
-                    CustomButton(
-                        modifier = Modifier.weight(0.5f),
-                        backgroundColor = AppColors.Primary,
-                        text = "Сохранить",
-                        textSize = 12.sp,
-                        onClick = {
-                            extended = false
-                            val data = CategoryData(
-                                name = categoryInput,
-                                keywords = keywordsInput
-                                    .split(", ")
-                                    .map { it.trim() }
-                                    .filter { it.isNotEmpty() },
-                                color = colorInput
-                            )
-                            onSave.invoke(category.id, data)
-                        }
+        Column {
+            AnimatedVisibility(extended) {
+                Column (
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    ColorPicker(
+                        initColor = category.color,
+                        CategoryColors.list,
+                        onSelected = { colorInput = it })
+                    CustomTextField(
+                        placeholder = "Категория",
+                        value = categoryInput,
+                        onValueChange = { categoryInput = it }
                     )
-                    CustomButton(
-                        modifier = Modifier.weight(0.5f),
-                        backgroundColor = AppColors.Red,
-                        text = "Удалить",
-                        textSize = 12.sp,
-                        onClick = { onDelete.invoke(category.id) }
+                    CustomTextField(
+                        placeholder = "Ключевые слова",
+                        value = keywordsInput,
+                        onValueChange = { keywordsInput = it }
                     )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CustomButton(
+                            modifier = Modifier.weight(0.5f),
+                            backgroundColor = AppColors.Primary,
+                            text = "Сохранить",
+                            textSize = 12.sp,
+                            onClick = {
+                                extended = false
+                                val data = CategoryData(
+                                    name = categoryInput,
+                                    keywords = keywordsInput
+                                        .split(", ")
+                                        .map { it.trim() }
+                                        .filter { it.isNotEmpty() },
+                                    color = colorInput
+                                )
+                                onSave.invoke(category.id, data)
+                            }
+                        )
+                        CustomButton(
+                            modifier = Modifier.weight(0.5f),
+                            backgroundColor = AppColors.Red,
+                            text = "Удалить",
+                            textSize = 12.sp,
+                            onClick = { onDelete.invoke(category.id) }
+                        )
+                    }
                 }
             }
         }

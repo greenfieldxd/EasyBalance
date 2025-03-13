@@ -168,7 +168,7 @@ actual fun TransactionItem(
             }
         }
 
-        Row (modifier = Modifier) {
+        Row {
             AnimatedVisibility(visible = extended) {
                 Row (
                     horizontalArrangement = Arrangement.spacedBy(8.dp)

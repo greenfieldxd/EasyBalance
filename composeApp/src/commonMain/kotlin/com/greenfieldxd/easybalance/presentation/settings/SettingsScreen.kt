@@ -38,12 +38,24 @@ class SettingsScreen : Screen {
                 color = AppColors.OnBackground
             )
 
-            CustomButton(
+            Column (
                 modifier = Modifier.fillMaxWidth(),
-                text = "Удалить все транзакции",
-                backgroundColor = AppColors.Red,
-                onClick = { screenModel.deleteAllTransactions() }
-            )
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                CustomButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Удалить все транзакции",
+                    backgroundColor = AppColors.Red,
+                    onClick = { screenModel.deleteAllTransactions() }
+                )
+
+                CustomButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Сбросить категории по умолчанию",
+                    backgroundColor = AppColors.Red,
+                    onClick = { screenModel.returnCategoriesToDefault() }
+                )
+            }
         }
     }
 }
