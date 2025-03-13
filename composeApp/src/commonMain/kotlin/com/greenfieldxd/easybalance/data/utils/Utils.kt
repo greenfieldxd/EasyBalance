@@ -16,14 +16,13 @@ fun truncateToDecimals(value: Double, decimals: Int): Double {
 
 fun todayDateTime(): String = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString()
 
-fun formatDate(dateTime: String): String {
-    val parsedDateTime = LocalDateTime.parse(dateTime)
+fun formatDate(dateTime: LocalDateTime): String {
     return buildString {
-        append(parsedDateTime.dayOfMonth.toString().padStart(2, '0')).append(".")
-        append(parsedDateTime.monthNumber.toString().padStart(2, '0')).append(".")
-        append(parsedDateTime.year).append(" ")
-        append(parsedDateTime.hour.toString().padStart(2, '0')).append(":")
-        append(parsedDateTime.minute.toString().padStart(2, '0')).append(":")
-        append(parsedDateTime.second.toString().padStart(2, '0'))
+        append(dateTime.dayOfMonth.toString().padStart(2, '0')).append(".")
+        append(dateTime.monthNumber.toString().padStart(2, '0')).append(".")
+        append(dateTime.year).append(" ")
+        append(dateTime.hour.toString().padStart(2, '0')).append(":")
+        append(dateTime.minute.toString().padStart(2, '0')).append(":")
+        append(dateTime.second.toString().padStart(2, '0'))
     }
 }

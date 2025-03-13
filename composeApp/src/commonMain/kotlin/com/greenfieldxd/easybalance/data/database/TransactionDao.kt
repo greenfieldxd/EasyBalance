@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.LocalDateTime
 
 class TransactionDao(
     private val db: Database,
@@ -29,7 +30,7 @@ class TransactionDao(
                 amount = transactionEntity.amount,
                 category = transactionEntity.category,
                 description = transactionEntity.description,
-                date = transactionEntity.date,
+                date = LocalDateTime.parse(transactionEntity.date),
                 transactionType = if (transactionEntity.transactionType == TransactionType.INCOME.ordinal.toLong()) TransactionType.INCOME else TransactionType.SPEND
         )
     }
@@ -40,7 +41,7 @@ class TransactionDao(
             amount = amount,
             category = category,
             description= description,
-            date = date,
+            date =  LocalDateTime.parse(date),
             transactionType = if (transactionType == TransactionType.INCOME.ordinal.toLong()) TransactionType.INCOME else TransactionType.SPEND
         )
     }).asFlow().mapToList(ioDispatcher)

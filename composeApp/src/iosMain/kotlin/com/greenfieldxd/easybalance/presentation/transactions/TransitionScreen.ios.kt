@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -26,26 +27,52 @@ import androidx.compose.ui.unit.sp
 import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.utils.formatDate
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
+import com.greenfieldxd.easybalance.domain.TransactionFilterType
 import com.greenfieldxd.easybalance.domain.model.TransactionModel
 import com.greenfieldxd.easybalance.presentation.other.AppColors
+import com.greenfieldxd.easybalance.presentation.other.CustomButton
 import com.greenfieldxd.easybalance.presentation.other.CustomSwipeBox
 
 @Composable
 actual fun TransactionsListSection(
     transactions: List<TransactionModel>,
+    transactionFilterType: TransactionFilterType,
     categoriesData: Map<String, Pair<String, Color>>,
     scrollState: LazyListState,
+    onChangeTransactionsFilter: (TransactionFilterType) -> Unit,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Транзакции",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = AppColors.OnBackground
-        )
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = "Транзакции",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = AppColors.OnBackground
+            )
+
+            val filterButtonText = when (transactionFilterType) {
+                TransactionFilterType.TODAY -> "За сегодня"
+                TransactionFilterType.WEEK -> "За неделю"
+                TransactionFilterType.MONTH -> "За месяц"
+                TransactionFilterType.YEAR -> "За год"
+                TransactionFilterType.ALL_TIME -> "За все время"
+            }
+
+            CustomButton(
+                modifier = Modifier,
+                backgroundColor = AppColors.Background,
+                contentColor = AppColors.OnBackground,
+                text = filterButtonText,
+                onClick = { onChangeTransactionsFilter.invoke(transactionFilterType) }
+            )
+        }
         LazyColumn(
             state = scrollState,
             modifier = Modifier

@@ -30,6 +30,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.greenfieldxd.easybalance.data.TransactionType
 import com.greenfieldxd.easybalance.data.utils.formatToCurrency
+import com.greenfieldxd.easybalance.domain.TransactionFilterType
 import com.greenfieldxd.easybalance.domain.model.TransactionModel
 import com.greenfieldxd.easybalance.presentation.other.AppColors
 import com.greenfieldxd.easybalance.presentation.other.ChangeTransactionTypeButton
@@ -44,6 +45,7 @@ class TransitionScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         val transactions by screenModel.transactions.collectAsState(emptyList())
+        val transactionFilterType by screenModel.transactionFilterType.collectAsState(TransactionFilterType.TODAY)
         val categoriesData by screenModel.categoriesData.collectAsState(emptyMap())
         val totalBalance by screenModel.balance.collectAsState(0.0)
 
@@ -82,7 +84,9 @@ class TransitionScreen : Screen {
             TransactionsListSection(
                 scrollState = scrollState,
                 transactions = transactions,
+                transactionFilterType = transactionFilterType,
                 categoriesData = categoriesData,
+                onChangeTransactionsFilter = { screenModel.nextFilterType() },
                 onEdit = { navigator.push(EditTransitionScreen(it)) },
                 onDelete = { screenModel.deleteTransaction(it) })
         }
@@ -128,8 +132,10 @@ fun BalanceSection(
 @Composable
 expect fun TransactionsListSection(
     transactions: List<TransactionModel>,
+    transactionFilterType: TransactionFilterType,
     categoriesData: Map<String, Pair<String, Color>>,
     scrollState: LazyListState,
+    onChangeTransactionsFilter: (TransactionFilterType) -> Unit,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
 )
