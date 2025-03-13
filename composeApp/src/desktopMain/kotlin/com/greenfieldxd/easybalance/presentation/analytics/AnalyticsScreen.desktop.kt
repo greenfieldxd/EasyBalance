@@ -19,7 +19,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
+import com.greenfieldxd.easybalance.domain.TransactionFilterType
 import com.greenfieldxd.easybalance.presentation.other.AppColors
+import com.greenfieldxd.easybalance.presentation.other.CustomButton
 
 actual class AnalyticsScreen : Screen {
 
@@ -28,18 +30,40 @@ actual class AnalyticsScreen : Screen {
     @Composable
     override fun Content() {
         val screenModel = koinScreenModel<AnalyticsScreenModel>()
-        val expensesByCategory by screenModel.expensesByCategory.collectAsState()
+        val transactionFilterType by screenModel.transactionFilterType.collectAsState(TransactionFilterType.TODAY)
+        val expensesByCategory by screenModel.expensesByCategory.collectAsState(emptyList())
 
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Text(
+            Row (
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
-                text = "Аналитика",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = AppColors.OnBackground
-            )
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = "Аналитика",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = AppColors.OnBackground
+                )
+
+                val filterButtonText = when (transactionFilterType) {
+                    TransactionFilterType.TODAY -> "За сегодня"
+                    TransactionFilterType.WEEK -> "За неделю"
+                    TransactionFilterType.MONTH -> "За месяц"
+                    TransactionFilterType.YEAR -> "За год"
+                    TransactionFilterType.ALL_TIME -> "За все время"
+                }
+
+                CustomButton(
+                    modifier = Modifier,
+                    backgroundColor = AppColors.Background,
+                    contentColor = AppColors.OnBackground,
+                    text = filterButtonText,
+                    onClick = { screenModel.nextFilterType() }
+                )
+            }
 
             if (expensesByCategory.size >= 2) {
                 Row(
