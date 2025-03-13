@@ -20,11 +20,6 @@ class CategoryDao(
     private val queries  = db.databaseQueries
     private val json = Json { encodeDefaults = true }
 
-    fun insertWithId(id: Long, category: CategoryData) {
-        val jsonString = json.encodeToString(category)
-        queries.insertCategoryWithId(id, jsonString)
-    }
-
     fun insert(category: CategoryData) {
         val jsonString = json.encodeToString(category)
         queries.insertCategory(jsonString)

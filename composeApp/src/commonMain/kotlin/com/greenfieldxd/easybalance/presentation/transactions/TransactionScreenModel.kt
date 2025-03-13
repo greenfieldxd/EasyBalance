@@ -29,7 +29,7 @@ class TransactionScreenModel(
     }
 
     val categoriesData = categoryDao.getAll().map { categories ->
-        categories.associate { category -> category.id to Pair(category.name, category.color) }
+        categories.associate { category -> category.name to Pair(category.name, category.color) }
     }
 
 

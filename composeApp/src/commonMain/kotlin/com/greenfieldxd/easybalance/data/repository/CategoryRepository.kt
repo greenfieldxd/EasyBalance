@@ -6,7 +6,7 @@ import kotlinx.coroutines.runBlocking
 
 interface CategoryRepository {
     fun trySetDefaultCategories()
-    suspend fun getCategory(description: String): Pair<Long, String>
+    suspend fun getCategory(description: String): Pair<String, String>
 }
 
 class CategoryRepositoryImpl(
@@ -23,13 +23,13 @@ class CategoryRepositoryImpl(
     override fun trySetDefaultCategories() {
         val count = runBlocking { categoriesCount.first() }
         if (count == 0L) {
-            for ((index, category) in CategoryDefaultDataSource.categories.withIndex()) {
-                categoryDao.insertWithId(index.toLong(), category)
+            for (category in CategoryDefaultDataSource.categories) {
+                categoryDao.insert(category)
             }
         }
     }
 
-    override suspend fun getCategory(description: String): Pair<Long, String> {
+    override suspend fun getCategory(description: String): Pair<String, String> {
         val categories = categoriesFlow.first()
         val normalizedDesc = description.lowercase()
 
@@ -38,7 +38,7 @@ class CategoryRepositoryImpl(
                 fuzzyMatchWord(
                     category.name.lowercase(),
                     normalizedDesc
-                ) -> category.id to "Неопределено"
+                ) -> category.name to "Неопределено"
 
                 category.keywords.any { keyword ->
                     fuzzyMatchWord(
@@ -46,7 +46,7 @@ class CategoryRepositoryImpl(
                         normalizedDesc
                     )
                 } -> {
-                    category.id to category.keywords.first { keyword ->
+                    category.name to category.keywords.first { keyword ->
                         fuzzyMatchWord(
                             keyword.lowercase(),
                             normalizedDesc
@@ -56,7 +56,7 @@ class CategoryRepositoryImpl(
 
                 else -> null
             }
-        } ?: (CategoryDefaultDataSource.categories.lastIndex.toLong() to "Неопределено")
+        } ?: (CategoryDefaultDataSource.categories.last().name to "Неопределено")
     }
 
     private fun fuzzyMatchWord(word: String, text: String, threshold: Double = 0.3): Boolean {

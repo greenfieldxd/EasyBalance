@@ -89,7 +89,7 @@ fun EditTransactionItem(
     onCancel: () -> Unit
 ) {
     var amount by remember { mutableStateOf(transaction.amount.toString()) }
-    var categoryId by remember { mutableStateOf(transaction.categoryId) }
+    var category by remember { mutableStateOf(transaction.category) }
     var description by remember { mutableStateOf(transaction.description) }
     var transactionType by remember { mutableStateOf(transaction.transactionType) }
 
@@ -110,7 +110,7 @@ fun EditTransactionItem(
         ) {
 
             ChangeTransactionTypeButton(transactionType, onTypeChange = { transactionType = it })
-            CategoryPicker(initCategoryId = categoryId, categories = categories, onSelected = { categoryId = it.id })
+            CategoryPicker(initCategory = category, categories = categories, onSelected = { category = it.name })
             CustomTextField(
                 value = description,
                 onValueChange = { description = it },
@@ -134,7 +134,7 @@ fun EditTransactionItem(
                         val updatedTransaction = TransactionModel(
                             id = transaction.id,
                             amount = amount.toDoubleOrNull() ?: transaction.amount,
-                            categoryId = categoryId,
+                            category = category,
                             description = description,
                             date = transaction.date,
                             transactionType = transactionType
@@ -154,4 +154,4 @@ fun EditTransactionItem(
 }
 
 @Composable
-expect fun CategoryPicker(initCategoryId: Long, categories: List<CategoryModel>, onSelected: (CategoryModel) -> Unit)
+expect fun CategoryPicker(initCategory: String, categories: List<CategoryModel>, onSelected: (CategoryModel) -> Unit)

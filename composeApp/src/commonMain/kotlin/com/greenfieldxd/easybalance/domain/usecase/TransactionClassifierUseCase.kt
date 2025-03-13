@@ -23,7 +23,7 @@ class TransactionClassifierUseCaseImpl(
         }
     }
 
-    private suspend fun extractAmountAndCategory(input: String): Triple<Double?, Long, String> {
+    private suspend fun extractAmountAndCategory(input: String): Triple<Double?, String, String> {
         val amountRegex = Regex("\\d+(\\.\\d+)?")
         val amount = truncateToDecimals(amountRegex.find(input)?.value?.toDoubleOrNull() ?: 0.0, 2)
         val inputWithoutAmount = input.replace(amountRegex, "").trim()

@@ -1,7 +1,7 @@
 CREATE TABLE TransactionEntity (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     amount REAL NOT NULL,
-    categoryId INTEGER NOT NULL,
+    category TEXT NOT NULL,
     description TEXT NOT NULL,
     date TEXT NOT NULL,
     transactionType INTEGER NOT NULL
@@ -15,14 +15,14 @@ SELECT * FROM TransactionEntity
 WHERE id IS :id;
 
 insertTransaction:
-INSERT INTO TransactionEntity(amount, categoryId, description, date, transactionType)
+INSERT INTO TransactionEntity(amount, category, description, date, transactionType)
 VALUES (?, ?, ?, ?, ?);
 
 updateTransaction:
 UPDATE TransactionEntity
 SET
     amount = :amount,
-    categoryId = :categoryId,
+    category = :category,
     description = :description,
     transactionType = :transactionType
 WHERE id = :id;
@@ -44,10 +44,6 @@ SELECT COUNT(*) FROM CategoryEntity;
 
 getAllCategories:
 SELECT * FROM CategoryEntity;
-
-insertCategoryWithId:
-INSERT INTO CategoryEntity(id, data)
-VALUES (?, ?);
 
 insertCategory:
 INSERT INTO CategoryEntity(data)

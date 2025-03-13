@@ -20,12 +20,12 @@ class GetAnalyticsUseCaseImpl(
 
         if (transactions.isNotEmpty() && categories.isNotEmpty()) {
             val filteredTransactions = transactions.filter { it.transactionType == TRANSITION_TYPE }
-            return filteredTransactions.groupBy { it.categoryId }
-                .mapNotNull { (categoryId, transList) ->
-                    categories.find { it.id == categoryId }?.let { category ->
+            return filteredTransactions.groupBy { it.category }
+                .mapNotNull { (category, transList) ->
+                    categories.find { it.name == category }?.let { categoryModel ->
                         val categoryTotal = transList.sumOf { it.amount }
                         PieChartModel(
-                            category = category,
+                            category = categoryModel,
                             value = categoryTotal,
                         )
                     }

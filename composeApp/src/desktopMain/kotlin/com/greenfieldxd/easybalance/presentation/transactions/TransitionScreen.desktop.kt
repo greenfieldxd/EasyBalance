@@ -49,7 +49,7 @@ import com.greenfieldxd.easybalance.presentation.other.AppColors
 @Composable
 actual fun TransactionsListSection(
     transactions: List<TransactionModel>,
-    categoriesData: Map<Long, Pair<String, Color>>,
+    categoriesData: Map<String, Pair<String, Color>>,
     scrollState: LazyListState,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
@@ -107,7 +107,7 @@ actual fun TransactionsListSection(
 actual fun TransactionItem(
     modifier: Modifier,
     transaction: TransactionModel,
-    categoriesData: Map<Long, Pair<String, Color>>,
+    categoriesData: Map<String, Pair<String, Color>>,
     onEdit: ((Long) -> Unit)?,
     onDelete: ((Long) -> Unit)?
 ) {
@@ -136,7 +136,7 @@ actual fun TransactionItem(
                     color = if (transaction.transactionType == TransactionType.INCOME) AppColors.Green else AppColors.Red
                 )
                 Text(
-                    text = categoriesData[transaction.categoryId]?.first ?: "Разное",
+                    text = categoriesData[transaction.category]?.first ?: "Разное",
                     style = MaterialTheme.typography.labelLarge,
                     color = AppColors.OnSurface
                 )
@@ -144,7 +144,7 @@ actual fun TransactionItem(
                     modifier = Modifier
                         .size(16.dp)
                         .background(
-                            color = categoriesData[transaction.categoryId]?.second ?: AppColors.Primary,
+                            color = categoriesData[transaction.category]?.second ?: AppColors.Primary,
                             shape = CircleShape
                         )
                 )

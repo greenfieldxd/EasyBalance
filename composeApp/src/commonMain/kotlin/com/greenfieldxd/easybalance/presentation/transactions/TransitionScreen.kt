@@ -128,7 +128,7 @@ fun BalanceSection(
 @Composable
 expect fun TransactionsListSection(
     transactions: List<TransactionModel>,
-    categoriesData: Map<Long, Pair<String, Color>>,
+    categoriesData: Map<String, Pair<String, Color>>,
     scrollState: LazyListState,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
@@ -138,7 +138,7 @@ expect fun TransactionsListSection(
 expect fun TransactionItem(
     modifier: Modifier = Modifier,
     transaction: TransactionModel,
-    categoriesData: Map<Long, Pair<String, Color>>,
+    categoriesData: Map<String, Pair<String, Color>>,
     onEdit: ((Long) -> Unit)? = null,
     onDelete: ((Long) -> Unit)? = null
 )

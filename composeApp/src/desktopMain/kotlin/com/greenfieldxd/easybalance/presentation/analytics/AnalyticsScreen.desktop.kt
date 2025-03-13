@@ -41,7 +41,7 @@ actual class AnalyticsScreen : Screen {
                 color = AppColors.OnBackground
             )
 
-            if (expensesByCategory.size > 2) {
+            if (expensesByCategory.size >= 2) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
                 ) {
